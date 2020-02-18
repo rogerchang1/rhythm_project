@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2243421565991925365}
   m_Layer: 0
   m_Name: BeatText
-  m_TagString: Untagged
+  m_TagString: BeatTextTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,9 +118,10 @@ Transform:
   m_GameObject: {fileID: 4285126948979157551}
   m_LocalRotation: {x: 0, y: 0, z: -0.9999906, w: 0.004337152}
   m_LocalPosition: {x: -1.5, y: 10, z: 0}
-  m_LocalScale: {x: 0.48304102, y: 0.45372042, z: 0.48304102}
+  m_LocalScale: {x: 0.48304102, y: 0.3531899, z: 0.48304102}
   m_Children:
   - {fileID: 2243421565991925364}
+  - {fileID: 8313079055928447411}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -179.503}
@@ -161,7 +162,7 @@ SpriteRenderer:
   m_SortingLayerID: 1541671499
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c8f4281d16c10d14ca8f86e13f65429a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c5ef85dc206a20b408068e0b4e0116fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -188,12 +189,106 @@ MonoBehaviour:
   judgePos: {x: 0, y: 0}
   removePos: {x: 0, y: 0}
   beatOfThisNote: 0
+  endBeatOfThisNote: 0
   sm: {fileID: 0}
   lane: 0
   isHit: 0
+  pauseAtJudgeBar: 0
+  noteType: 0
   HitEffect: {fileID: 3156016496135717026, guid: 223ef931d33d8e1428c157c9002e87a8,
     type: 3}
   GoodEffect: {fileID: 0}
   PerfectEffect: {fileID: 0}
   MissEffect: {fileID: 7252539404786105904, guid: a7b169d7a1eee0c409b42dae5e6eda0d,
     type: 3}
+--- !u!1 &8628765780107893090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8313079055928447411}
+  - component: {fileID: 6748848700505887612}
+  - component: {fileID: 4623255707922111597}
+  m_Layer: 0
+  m_Name: HoldRelease
+  m_TagString: HoldReleaseTag
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8313079055928447411
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8628765780107893090}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9999906, w: 0.004337152}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 2.0702176}
+  m_Children: []
+  m_Father: {fileID: 4285126948979157549}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &6748848700505887612
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8628765780107893090}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!102 &4623255707922111597
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8628765780107893090}
+  m_Text: 
+  m_OffsetZ: 0
+  m_CharacterSize: 1
+  m_LineSpacing: 1
+  m_Anchor: 4
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 0
+  m_FontStyle: 0
+  m_RichText: 1
+  m_Font: {fileID: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
