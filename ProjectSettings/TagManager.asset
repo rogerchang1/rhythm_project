@@ -41,12 +41,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: text
-    uniqueID: 2936394959
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Arrows
     uniqueID: 1541671499
+    locked: 0
+  - name: text
+    uniqueID: 2936394959
     locked: 0

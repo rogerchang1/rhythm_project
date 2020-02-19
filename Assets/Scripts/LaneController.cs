@@ -31,6 +31,7 @@ public class LaneController : MonoBehaviour
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
                     Debug.Log("Hit " + ((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats))/ limit) *100f);
+                    AccuracyPopup.Create(new Vector3(0,1,0), ((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                     noteList.RemoveFirst();
                     Destroy(firstNote);
