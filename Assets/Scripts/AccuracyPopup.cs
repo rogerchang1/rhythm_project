@@ -7,7 +7,7 @@ public class AccuracyPopup : MonoBehaviour
 {
     
     //Create a Accuracy Popup
-    public static AccuracyPopup Create(Vector3 position, float accuracyAmount)
+    public static AccuracyPopup Create(Vector3 position, string accuracyAmount)
     {
         Transform accuracyPopupTransform = Instantiate(GameAssets.i.AccuracyPopup, position, Quaternion.identity);
         AccuracyPopup accuracyPopup = accuracyPopupTransform.GetComponent<AccuracyPopup>();
@@ -28,7 +28,7 @@ public class AccuracyPopup : MonoBehaviour
 
         
     }
-    public void Setup(float accuracy)
+    public void Setup(string accuracy)
     {
         textMesh.SetText(accuracy.ToString());
         textColor = textMesh.color;

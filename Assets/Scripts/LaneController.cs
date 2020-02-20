@@ -9,29 +9,32 @@ public class LaneController : MonoBehaviour
     public KeyCode keyToPress;
     public SongManager sm;
     public int laneId;
+    public float firstNoteBeat; //debug purposes
     public GameObject noteTemp; //used to temporarily keep track of long note's starting beat.
+    private float limit;
     // Start is called before the first frame update
     void Start()
     {
         noteList = new LinkedList<GameObject>();
+        limit = sm.beatsShownInAdvance * .2f; //limit used to be just 2f, but I think that's unbalanced with the scroll speed modifier.
     }
 
     // Update is called once per frame
     void Update()
     {
-        float limit = sm.beatsShownInAdvance * .2f; //limit used to be just 2f, but I think that's unbalanced with the scroll speed modifier.
+        
         if (noteList.Count != 0)
         {
             GameObject firstNote = noteList.First.Value;
             NoteObject2 n = firstNote.GetComponent<NoteObject2>();
+            firstNoteBeat = n.beatOfThisNote;
 
             //regular hit
             if (Input.GetKeyDown(keyToPress) && n.noteType == 0)
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
-                    Debug.Log("Hit " + ((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats))/ limit) *100f);
-                    AccuracyPopup.Create(new Vector3(0,1,0), ((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f);
+                    noteHit(n);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                     noteList.RemoveFirst();
                     Destroy(firstNote);
@@ -43,7 +46,7 @@ public class LaneController : MonoBehaviour
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
-                    Debug.Log("Note Hold " + ((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f);
+                    noteHit(n);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                     n.isHit = true;
                     n.pauseAtJudgeBar = true;
@@ -53,6 +56,8 @@ public class LaneController : MonoBehaviour
             }
             else if (!Input.GetKey(keyToPress) && noteTemp != null)
             {
+                //Miss Hold
+                AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
                 Destroy(noteTemp);
             }
 
@@ -61,7 +66,7 @@ public class LaneController : MonoBehaviour
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit && noteTemp.GetComponent<NoteObject2>().isHit == true)
                 {
-                    Debug.Log("Note Release " + ((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f);
+                    noteHit(n);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                     n.isHit = true;
                     n.pauseAtJudgeBar = true;
@@ -74,12 +79,16 @@ public class LaneController : MonoBehaviour
             }
             else if (!Input.GetKey(keyToPress) && noteTemp != null)
             {
+                //Miss Release
+                AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
                 Destroy(noteTemp);
             }
 
+            //Note Miss
             if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
             {
                 //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
+                AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
                 noteList.RemoveFirst();
                 Destroy(firstNote);
                 if(noteTemp != null)
@@ -89,4 +98,28 @@ public class LaneController : MonoBehaviour
             }
         }
     }
+    private float RoundUp(float toRound)
+    {
+        if (toRound % 10 == 0) return toRound;
+        return (10 - toRound % 10) + toRound;
+    }
+
+    //Display accuracy on note hit
+    private void noteHit(NoteObject2 n)
+    {
+
+        float noteScore = RoundUp(Mathf.Ceil(((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f));
+        string noteScoreString = "";
+        if(100f - noteScore < 10)
+        {
+            noteScoreString = "!MIKAN!";
+        }
+        else if(n.beatOfThisNote < sm.songPosInBeats)
+            noteScoreString = "SLOW" + noteScore.ToString();
+        else
+            noteScoreString = "FAST " + noteScore.ToString();
+
+        AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
+    }
+
 }
