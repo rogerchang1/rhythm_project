@@ -19,4 +19,5 @@ public class GameAssets : MonoBehaviour
     }
 
     public Transform AccuracyPopup;
+    public Transform ComboDisplay;
 }

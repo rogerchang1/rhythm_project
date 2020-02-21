@@ -11,6 +11,7 @@ public class LaneController : MonoBehaviour
     public int laneId;
     public float firstNoteBeat; //debug purposes
     public GameObject noteTemp; //used to temporarily keep track of long note's starting beat.
+
     private float limit;
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class LaneController : MonoBehaviour
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
+                    GameManager2._i.increaseCombo();
                     noteHit(n);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                     noteList.RemoveFirst();
@@ -120,6 +122,7 @@ public class LaneController : MonoBehaviour
             noteScoreString = "FAST " + noteScore.ToString();
 
         AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
+
     }
 
 }
