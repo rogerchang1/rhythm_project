@@ -53,10 +53,10 @@ public class SongManager : MonoBehaviour
         string[] lane4 = new string[] { "43", "44", "70","79","86","95" };
         string[] lane5 = new string[] {  "36","38","41","42", "68+69","71","73","74","78", "80+83", "84+85","87","89","90","94","96" };
         string[] lane6 = new string[] { "34","34.5", "35","35.5","39", "45","48+49","52", "55+56",  "64+65", "75", "76","77","92","93" };
-        float[][] emptyLane = new float[][] {};
-        float[][] testLane = new float[][] { new float [] {12f,16f }, new float[] { 24f}, new float[] { 28f }, new float[] { 32f }, new float[] { 36f }, };
+        string[] emptyLane = new string[] {};
+        string[] testLane = new string[] { "12+16", "24"};
 
-        //notes = new float[][][] { noteParser(lane1), noteParser(lane2), noteParser(lane3), noteParser(lane4)};
+        //notes = new float[][][] { noteParser(testLane), noteParser(emptyLane), noteParser(emptyLane), noteParser(emptyLane)};
         notes = new float[][][] { noteParser(lane1), noteParser(lane2), noteParser(lane3),noteParser(lane4),noteParser(lane5),noteParser(lane6)};
         nextIndexArr = new int[notes.Length];
         lanes = new GameObject[notes.Length];

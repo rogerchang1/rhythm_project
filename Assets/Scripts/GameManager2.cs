@@ -8,13 +8,13 @@ public class GameManager2 : MonoBehaviour
     
     public static GameManager2 _i;
     public GameObject comboDisplay;
-    public int comboTracker;
+    public int comboCount;
     // Start is called before the first frame update
     void Start()
     {
         _i = this;
         comboDisplay = (GameObject)Instantiate(comboDisplay);
-        comboTracker = 0;
+        comboCount = 0;
     }
 
     // Update is called once per frame
@@ -29,8 +29,17 @@ public class GameManager2 : MonoBehaviour
 
     public void increaseCombo()
     {
-        comboTracker++;
-        comboDisplay.GetComponent<ComboDisplay>().setComboDisplay(comboTracker.ToString());
+        comboCount++;
+        comboDisplay.GetComponent<ComboDisplay>().setComboDisplay(comboCount);
+    }
+
+    public void resetCombo()
+    {
+        if (comboCount > 0)
+        {
+            comboCount = 0;
+            comboDisplay.GetComponent<ComboDisplay>().setComboDisplay(comboCount);
+        }
     }
 
 

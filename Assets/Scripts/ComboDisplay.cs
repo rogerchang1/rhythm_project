@@ -22,9 +22,9 @@ public class ComboDisplay : MonoBehaviour
         disappearTimer = DISAPPEAR_TIMER_MAX;
     }
 
-    public void setComboDisplay(string combo)
+    public void setComboDisplay(int combo)
     {
-        textMesh.SetText(combo);
+        textMesh.SetText(combo.ToString());
         textMesh.color = origColor;
         textColor = textMesh.color;
         disappearTimer = DISAPPEAR_TIMER_MAX;
@@ -42,23 +42,21 @@ public class ComboDisplay : MonoBehaviour
             float increaseScaleAmount = 1f;
             transform.localScale += Vector3.one * increaseScaleAmount * Time.deltaTime;
         }
-        else
+        else if (disappearTimer > 0)
         {
             float decreaseScaleAmount = 1f;
             transform.localScale -= Vector3.one * decreaseScaleAmount * Time.deltaTime;
         }
 
-        disappearTimer -= Time.deltaTime;
-        if (disappearTimer < 0)
+        if (disappearTimer > 0f)
+        {
+            disappearTimer -= Time.deltaTime;
+        }else if (textColor.a > .5f)
         {
             //Start disappearing
             float disappearSpeed = 3f;
             textColor.a -= disappearSpeed * Time.deltaTime;
             textMesh.color = textColor;
-            if (textColor.a < 0)
-            {
-                //Destroy(gameObject);
-            }
         }
     }
 }

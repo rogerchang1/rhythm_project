@@ -35,7 +35,6 @@ public class LaneController : MonoBehaviour
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
-                    GameManager2._i.increaseCombo();
                     noteHit(n);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                     noteList.RemoveFirst();
@@ -56,12 +55,6 @@ public class LaneController : MonoBehaviour
                     noteList.RemoveFirst();
                 }
             }
-            else if (!Input.GetKey(keyToPress) && noteTemp != null)
-            {
-                //Miss Hold
-                AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                Destroy(noteTemp);
-            }
 
             //long hit release
             if (!Input.GetKey(keyToPress) && n.noteType == 2 && noteTemp != null)
@@ -70,26 +63,27 @@ public class LaneController : MonoBehaviour
                 {
                     noteHit(n);
                     //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
-                    n.isHit = true;
-                    n.pauseAtJudgeBar = true;
                     noteList.RemoveFirst();
                     
                     Destroy(firstNote);
                     Destroy(noteTemp);
 
                 }
+                else
+                {
+                    //Miss Release
+                    GameManager2._i.resetCombo();
+                    AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                    Destroy(noteTemp);
+                }
             }
-            else if (!Input.GetKey(keyToPress) && noteTemp != null)
-            {
-                //Miss Release
-                AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                Destroy(noteTemp);
-            }
+            
 
             //Note Miss
             if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
             {
                 //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
+                GameManager2._i.resetCombo();
                 AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
                 noteList.RemoveFirst();
                 Destroy(firstNote);
@@ -106,10 +100,10 @@ public class LaneController : MonoBehaviour
         return (10 - toRound % 10) + toRound;
     }
 
-    //Display accuracy on note hit
+    //Display accuracy on note hit and increase combo count
     private void noteHit(NoteObject2 n)
     {
-
+        GameManager2._i.increaseCombo();
         float noteScore = RoundUp(Mathf.Ceil(((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f));
         string noteScoreString = "";
         if(100f - noteScore < 10)
