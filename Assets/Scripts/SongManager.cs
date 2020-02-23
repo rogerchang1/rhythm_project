@@ -220,6 +220,7 @@ public class SongManager : MonoBehaviour
         //beatMap = Resources.Load("BeatMaps/beatMap1.txt") as TextAsset;
         string textMapString = beatMap.text.Trim();
         string[] textMapArr = textMapString.Split('\n');
+        int[] laneIdxArr;
 
         if (textMapArr.Length > 0)
         {
@@ -228,6 +229,7 @@ public class SongManager : MonoBehaviour
             if (Int32.TryParse(textMapArr[0].Trim(), out numLanes))
             {
                 notes = new float[numLanes][][];
+                laneIdxArr = new int[numLanes];
                 //notesList = new List<List<List<float>>>();
 
                 //creating each lane;
@@ -255,11 +257,20 @@ public class SongManager : MonoBehaviour
                             {
                                 float noteType = 0;
                                 float.TryParse(beatLine[j].Trim(), out noteType);
-                                notes[j - 1][idx] = new float[] { beat, noteType };
-                                List<float> l = new List<float>() { beat, noteType };
-                                //notesList[j - 1].Add(l);
+                                if (noteType > 0)
+                                {
+                                    notes[j - 1][laneIdxArr[j - 1]] = new float[] { beat, noteType };
+                                    List<float> l = new List<float>() { beat, noteType };
+                                    //notesList[j - 1].Add(l);
+                                    laneIdxArr[j - 1]++;
+                                }
+                                else
+                                {
+                                    //Invalid note, decrease array size for the lane by 1.
+                                    Array.Resize(ref notes[j - 1], notes[j - 1].Length - 1);
+                                }
                             }
-                            idx++;
+                            //idx++;
                         }
                         else
                         {
