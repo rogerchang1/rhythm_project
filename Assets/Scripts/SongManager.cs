@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class SongManager : MonoBehaviour
 {
@@ -39,6 +41,9 @@ public class SongManager : MonoBehaviour
     //judgement bar positions
     private float judgementBar_width, judgementBar_xPos_left, judgementBar_yPos;
 
+    //External file beat map
+    public TextAsset beatMap;
+
     public KeyCode speedUp, speedDown;
 
     // Start is called before the first frame update
@@ -57,7 +62,9 @@ public class SongManager : MonoBehaviour
         string[] testLane = new string[] { "12+16", "24"};
 
         //notes = new float[][][] { noteParser(testLane), noteParser(emptyLane), noteParser(emptyLane), noteParser(emptyLane)};
-        notes = new float[][][] { noteParser(lane1), noteParser(lane2), noteParser(lane3),noteParser(lane4),noteParser(lane5),noteParser(lane6)};
+        //notes = new float[][][] { noteParser(lane1), noteParser(lane2), noteParser(lane3),noteParser(lane4),noteParser(lane5),noteParser(lane6)};
+        //notes = transform.GetComponent<BeatMapParser>().notes;
+        parseBeatMapToArray();
         nextIndexArr = new int[notes.Length];
         lanes = new GameObject[notes.Length];
         judgementBar_width = judgementBar.GetComponent<SpriteRenderer>().bounds.size.x;
@@ -135,7 +142,13 @@ public class SongManager : MonoBehaviour
             int nextIndex = nextIndexArr[laneIdx];
             if (nextIndex < notesInLane.Length && notesInLane[nextIndex][0] < songPosInBeats + beatsShownInAdvance)
             {
-                for (int i = 0; i < notesInLane[nextIndex].Length; i++)
+                int noteType = 0;
+                if (notesInLane[nextIndex].Length == 2)
+                {
+                    noteType = (int)notesInLane[nextIndex][1];
+
+                }
+                if(noteType != 0)
                 {
                     GameObject n = (GameObject)Instantiate(note);
                 
@@ -143,28 +156,29 @@ public class SongManager : MonoBehaviour
                     n.transform.localScale -= new Vector3(n.transform.localScale.x * (1 - (judgementBar_width / notes.Length)), 0, 0);
 
                     //if it's a hold note, indicate if it's hold or release.
-                    if (notesInLane[nextIndex].Length > 1)
+
+                    switch (noteType)
                     {
-                        n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
-                        if (i == 0)
-                        {
-                            n.GetComponent<NoteObject2>().noteType = 1;
+                        case GameManager2.NOTE_NORMAL:
+                            n.GetComponent<NoteObject2>().noteType = noteType;
+                            break;
+                        case GameManager2.NOTE_HOLD:
+                            n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
+                            n.GetComponent<NoteObject2>().noteType = GameManager2.NOTE_HOLD;
                             n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
-                        }
-                        else
-                        {
-                            n.GetComponent<NoteObject2>().noteType = 2;
+                            break;
+                        case GameManager2.NOTE_RELEASE:
+                            n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
+                            n.GetComponent<NoteObject2>().noteType = noteType;
                             n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "release";
-                        }
-                        
-                    }
-                    else
-                    {
-                        n.GetComponent<NoteObject2>().noteType = 0;
+                            break;
+                        default:
+                            n.GetComponent<NoteObject2>().noteType = noteType;
+                            break;
                     }
 
                     //initialize the fields of the music note
-                    n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][i] + 1;                
+                    n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1;                
                     n.GetComponent<NoteObject2>().sm = this;
                     n.GetComponent<NoteObject2>().lane = laneIdx;
                     float lanePos = lanes[laneIdx].transform.position.x;
@@ -194,4 +208,94 @@ public class SongManager : MonoBehaviour
         }
         return output;
     }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(2);
+    }
+
+    //Parse TextAsset BeatMap (external text file) to a float[][][] array for holding notes data.
+    void parseBeatMapToArray()
+    {
+        //beatMap = Resources.Load("BeatMaps/beatMap1.txt") as TextAsset;
+        string textMapString = beatMap.text.Trim();
+        string[] textMapArr = textMapString.Split('\n');
+
+        if (textMapArr.Length > 0)
+        {
+            //First value in the Beat Map must be the number of lanes.
+            int numLanes;
+            if (Int32.TryParse(textMapArr[0].Trim(), out numLanes))
+            {
+                notes = new float[numLanes][][];
+                //notesList = new List<List<List<float>>>();
+
+                //creating each lane;
+                for (int i = 0; i < numLanes; i++)
+                {
+                    notes[i] = new float[textMapArr.Length - 1][];
+                   // notesList.Add(new List<List<float>>());
+                }
+
+                //Construct notes array
+                int idx = 0;
+                for (int i = 1; i < textMapArr.Length; i++)
+                {
+                    string[] beatLine = textMapArr[i].Split('/');
+
+                    //Each line in the file needs to have the beat position as the first value. The values after the beat position represent the note type. Delimiter is '/'.
+                    //The total number of values in the text file line should equal to numLanes + 1.
+                    if (beatLine.Length >= numLanes + 1)
+                    {
+                        float beat;
+                        if (float.TryParse(beatLine[0].Trim(), out beat))
+                        {
+
+                            for (int j = 1; j < numLanes + 1; j++)
+                            {
+                                float noteType = 0;
+                                float.TryParse(beatLine[j].Trim(), out noteType);
+                                notes[j - 1][idx] = new float[] { beat, noteType };
+                                List<float> l = new List<float>() { beat, noteType };
+                                //notesList[j - 1].Add(l);
+                            }
+                            idx++;
+                        }
+                        else
+                        {
+                            //Invalid line in text file, decrease array size for all lanes by 1
+                            for (int j = 0; j < numLanes; j++)
+                            {
+                                Array.Resize(ref notes[j], notes[j].Length - 1);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Invalid line in text file, decrease array size for all lanes by 1
+                        for (int j = 0; j < numLanes; j++)
+                        {
+                            Array.Resize(ref notes[j], notes[j].Length - 1);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < notes.Length; i++)
+                {
+                    Array.Sort(notes[i], (a, b) => compareForSort(a, b));
+                }
+            }
+
+        }
+    }
+
+    private int compareForSort(float[] a, float[] b)
+    {
+        if (a[0] != b[0])
+        {
+            return a[0].CompareTo(b[0]) > 0 ? 1 : -1;
+        }
+        return 0;
+    }
+
 }

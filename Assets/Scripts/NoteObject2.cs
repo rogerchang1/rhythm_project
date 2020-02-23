@@ -12,7 +12,7 @@ public class NoteObject2 : MonoBehaviour
     public SongManager sm;
     public float lane;
     public bool isHit = false, pauseAtJudgeBar = false;
-    public int noteType; //0 = normal, 1 = longHold, 2 = longRelease
+    public int noteType; //1 = normal, 2 = longHold, 3 = longRelease
 
     public GameObject HitEffect, GoodEffect, PerfectEffect, MissEffect;
 

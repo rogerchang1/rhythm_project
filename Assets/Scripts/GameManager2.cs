@@ -9,6 +9,11 @@ public class GameManager2 : MonoBehaviour
     public static GameManager2 _i;
     public GameObject comboDisplay;
     public int comboCount;
+
+    public const int NOTE_NORMAL = 1;
+    public const int NOTE_HOLD = 2;
+    public const int NOTE_RELEASE = 3;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -13,6 +13,7 @@ public class LaneController : MonoBehaviour
     public GameObject noteTemp; //used to temporarily keep track of long note's starting beat.
 
     private float limit;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +32,7 @@ public class LaneController : MonoBehaviour
             firstNoteBeat = n.beatOfThisNote;
 
             //regular hit
-            if (Input.GetKeyDown(keyToPress) && n.noteType == 0)
+            if (Input.GetKeyDown(keyToPress) && n.noteType == GameManager2.NOTE_NORMAL)
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
@@ -43,7 +44,7 @@ public class LaneController : MonoBehaviour
             }
 
             //long hit hold
-            if (Input.GetKey(keyToPress) && n.noteType == 1 && n.isHit == false)
+            if (Input.GetKey(keyToPress) && n.noteType == GameManager2.NOTE_HOLD && n.isHit == false)
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                 {
@@ -57,7 +58,7 @@ public class LaneController : MonoBehaviour
             }
 
             //long hit release
-            if (!Input.GetKey(keyToPress) && n.noteType == 2 && noteTemp != null)
+            if (!Input.GetKey(keyToPress) && n.noteType == GameManager2.NOTE_RELEASE && noteTemp != null)
             {
                 if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit && noteTemp.GetComponent<NoteObject2>().isHit == true)
                 {
