@@ -8,7 +8,11 @@ public class SongManager : MonoBehaviour
 {
 
     //song's current position in seconds
-    private float songPosition;
+    public float songPosition;
+    
+    //testing
+    public float audioSourceTime;
+    public float audioDSPTime;
 
     //song's current position in beats
     public float songPosInBeats;
@@ -17,7 +21,7 @@ public class SongManager : MonoBehaviour
     private float secPerBeat;
 
     //how much time has passed since start of song in seconds
-    private float dsptimesong;
+    public float dsptimesong;
 
     //blank audio at the start of the song
     public float offset;
@@ -35,20 +39,25 @@ public class SongManager : MonoBehaviour
     //how many beats to show in advance. also be a scroll speed modifier
     public int beatsShownInAdvance;
 
-    public GameObject note, lane, judgementBar;
+    public GameObject note, lane;
     private GameObject[] lanes;
 
     //judgement bar positions
     private float judgementBar_width, judgementBar_xPos_left, judgementBar_yPos;
+
+    //pauses the song
+    public bool isPause;
 
     public KeyCode speedUp, speedDown;
 
     // Start is called before the first frame update
     void Start()
     {
+        isPause = false;
         notes = transform.GetComponent<BeatMapParser>().notes;
         nextIndexArr = new int[notes.Length];
         lanes = new GameObject[notes.Length];
+        GameObject judgementBar = GameManager2._i.judgementBar;
         judgementBar_width = judgementBar.GetComponent<SpriteRenderer>().bounds.size.x;
         judgementBar_xPos_left = judgementBar.GetComponent<RectTransform>().transform.position.x - (judgementBar_width / 2);
         judgementBar_yPos = judgementBar.GetComponent<RectTransform>().transform.position.y;
@@ -60,7 +69,9 @@ public class SongManager : MonoBehaviour
 
             //set x position of lane with judgement bar and number of lanes.
             float posX = judgementBar_xPos_left + (i * (judgementBar_width / notes.Length)) + (judgementBar_width / notes.Length) / 2f;
-            l.transform.position = new Vector3(posX, 0, 0);
+            l.transform.localScale -= new Vector3(l.transform.localScale.x * (1 - (judgementBar_width / notes.Length)), 0, 0);
+            l.transform.position = new Vector3(posX, (float)Math.Floor((9f- judgementBar_yPos)/2f), 0);
+            l.transform.GetComponent<SpriteRenderer>().color = new Color(l.transform.GetComponent<SpriteRenderer>().color.r, l.transform.GetComponent<SpriteRenderer>().color.b, l.transform.GetComponent<SpriteRenderer>().color.g,0);
             l.GetComponent<LaneController>().sm = this;
             l.GetComponent<LaneController>().laneId = i;
             
@@ -105,8 +116,13 @@ public class SongManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
-        songPosInBeats = songPosition / secPerBeat;
+        if (!isPause)
+        {
+            songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
+            songPosInBeats = songPosition / secPerBeat;
+            audioSourceTime = GetComponent<AudioSource>().time;
+            audioDSPTime = (float)AudioSettings.dspTime;
+        }
 
         if (Input.GetKeyDown(speedUp))
         {
@@ -171,6 +187,22 @@ public class SongManager : MonoBehaviour
                 }
                 nextIndexArr[laneIdx] = nextIndex + 1;
             }
+        }
+    }
+
+    public void pauseSong(bool pause)
+    {
+        isPause = pause; 
+        if (pause)
+        {
+            isPause = true;
+            GetComponent<AudioSource>().Pause();
+        }
+        else
+        {
+            isPause = false;
+            dsptimesong = (float)AudioSettings.dspTime - songPosition - offset;
+            GetComponent<AudioSource>().Play();
         }
     }
 }

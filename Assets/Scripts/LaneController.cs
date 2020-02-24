@@ -24,7 +24,15 @@ public class LaneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Show SpriteRenderer
+        if (Input.GetKey(keyToPress) || Input.GetKeyDown(keyToPress))
+        {
+            transform.GetComponent<SpriteRenderer>().color = transform.GetComponent<SpriteRenderer>().color = new Color(transform.GetComponent<SpriteRenderer>().color.r, transform.GetComponent<SpriteRenderer>().color.b, transform.GetComponent<SpriteRenderer>().color.g, .75f);
+        }
+        else
+        {
+            transform.GetComponent<SpriteRenderer>().color = transform.GetComponent<SpriteRenderer>().color = new Color(transform.GetComponent<SpriteRenderer>().color.r, transform.GetComponent<SpriteRenderer>().color.b, transform.GetComponent<SpriteRenderer>().color.g, 0);
+        }
         if (noteList.Count != 0)
         {
             GameObject firstNote = noteList.First.Value;
@@ -74,18 +82,19 @@ public class LaneController : MonoBehaviour
                 {
                     //Miss Release
                     GameManager2._i.resetCombo();
-                    AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                    // AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                    GameManager2._i.setAccuracyDisplay("MISS");
                     Destroy(noteTemp);
                 }
             }
-            
 
             //Note Miss
             if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
             {
                 //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
                 GameManager2._i.resetCombo();
-                AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                //AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                GameManager2._i.setAccuracyDisplay("MISS");
                 noteList.RemoveFirst();
                 Destroy(firstNote);
                 if(noteTemp != null)
@@ -116,7 +125,8 @@ public class LaneController : MonoBehaviour
         else
             noteScoreString = "FAST " + noteScore.ToString();
 
-        AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
+        //AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
+        GameManager2._i.setAccuracyDisplay(noteScoreString);
 
     }
 

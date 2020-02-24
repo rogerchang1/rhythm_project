@@ -44,6 +44,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: judgementbar
+    uniqueID: 3587598025
+    locked: 0
   - name: Arrows
     uniqueID: 1541671499
     locked: 0
