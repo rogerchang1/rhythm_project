@@ -7,7 +7,7 @@ public class GameManager2 : MonoBehaviour
 {
     
     public static GameManager2 _i;
-    public GameObject comboDisplay, accuracyDisplay, songObject, judgementBar;
+    public GameObject comboDisplay, accuracyDisplay, songObject, judgementBar, characterTest;
     public int comboCount;
 
     public const int NOTE_NORMAL = 1;
@@ -17,6 +17,7 @@ public class GameManager2 : MonoBehaviour
     public KeyCode pause;
     public bool isPause;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +26,7 @@ public class GameManager2 : MonoBehaviour
         accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
         judgementBar = (GameObject)Instantiate(judgementBar);
         songObject = (GameObject)Instantiate(songObject);
+        characterTest = (GameObject)Instantiate(characterTest);
         comboCount = 0;
         isPause = false;
     }

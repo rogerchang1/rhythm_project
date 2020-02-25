@@ -2792,6 +2792,12 @@ PrefabInstance:
       propertyPath: pause
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 2872485676517780887, guid: 24cf8028f25c9484ebbaa5f4dcf912d3,
+        type: 3}
+      propertyPath: characterTest
+      value: 
+      objectReference: {fileID: 3086358481936982356, guid: e436a0f341a2f6349b9c5f1232a80b73,
+        type: 3}
     - target: {fileID: 6794770970820819887, guid: 24cf8028f25c9484ebbaa5f4dcf912d3,
         type: 3}
       propertyPath: m_Name
