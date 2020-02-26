@@ -113,7 +113,7 @@ public class LaneController : MonoBehaviour
     //Display accuracy on note hit and increase combo count
     private void noteHit(NoteObject2 n)
     {
-        GameManager2._i.increaseCombo();
+        
         float noteScore = RoundUp(Mathf.Ceil(((limit - Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats)) / limit) * 100f));
         string noteScoreString = "";
         if(100f - noteScore < 10)
@@ -126,6 +126,8 @@ public class LaneController : MonoBehaviour
             noteScoreString = "FAST " + noteScore.ToString();
 
         //AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
+        GameManager2._i.increaseCombo();
+        GameManager2._i.increaseScore(noteScore);
         GameManager2._i.setAccuracyDisplay(noteScoreString);
 
     }

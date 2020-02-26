@@ -5,11 +5,12 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
 
-    private const float DISAPPEAR_TIMER_MAX = .5f;
+    private const float DISAPPEAR_TIMER_MAX = 1f;
     private float disappearTimer;
     private Color spriteColor;
     private Color origColor;
     private SpriteRenderer spriteRender;
+    private bool spriteIsActive;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,16 +18,26 @@ public class CharacterController : MonoBehaviour
         spriteColor = spriteRender.color;
         origColor = spriteColor;
         spriteRender.color = new Color(1f, 1f, 1f, 0f);
+        spriteIsActive = false;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GameManager2._i.comboCount > 50)
+        if(GameManager2._i.comboCounter >= 5)
         {
+
+            if (!spriteIsActive)
+            {
+                disappearTimer = DISAPPEAR_TIMER_MAX;
+                spriteIsActive = true;
+            }
+            GameManager2._i.characterScoreModifier = 1;
             spriteRender.color = origColor;
             float moveXSpeed = 1f;
-            transform.position += new Vector3(0, moveXSpeed) * Time.deltaTime;
+            transform.position += new Vector3(moveXSpeed,0) * Time.deltaTime;
 
             if (disappearTimer > DISAPPEAR_TIMER_MAX * .5f)
             {
@@ -47,7 +58,13 @@ public class CharacterController : MonoBehaviour
                 float disappearSpeed = 3f;
                 Color spriteColor = spriteRender.color;
                 spriteColor.a -= disappearSpeed * Time.deltaTime;
+                spriteRender.color = spriteColor;
             }
+        }
+        else
+        {
+            GameManager2._i.characterScoreModifier = 0;
+            spriteIsActive = false;
         }
     }
 }
