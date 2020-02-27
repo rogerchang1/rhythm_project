@@ -12,7 +12,7 @@ public class GameManager2 : MonoBehaviour
 
     public int characterScoreModifier;
 
-    public double scoreCounter;
+    public float scoreCounter;
 
     public const int NOTE_NORMAL = 1;
     public const int NOTE_HOLD = 2;
@@ -78,7 +78,7 @@ public class GameManager2 : MonoBehaviour
 
     public void increaseScore(float laneModifier)
     {
-        scoreCounter += (double)(laneModifier/100f) * (SCORE_POINT+characterScoreModifier);
+        scoreCounter += (laneModifier/100f) * (SCORE_POINT+characterScoreModifier);
         Debug.Log(laneModifier);
         accuracyTrackers[((int)laneModifier/10)]++;
         scoreDisplay.GetComponent<ScoreDisplay>().setScoreDisplay(scoreCounter, accuracyTrackers);
