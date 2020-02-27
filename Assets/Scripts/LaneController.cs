@@ -13,93 +13,98 @@ public class LaneController : MonoBehaviour
     public GameObject noteTemp; //used to temporarily keep track of long note's starting beat.
 
     private float limit;
-
+    private const float LIMIT_MODIFIER = .3f;
     // Start is called before the first frame update
     void Start()
     {
         noteList = new LinkedList<GameObject>();
-        limit = sm.beatsShownInAdvance * .2f; //limit used to be just 2f, but I think that's unbalanced with the scroll speed modifier.
+        limit = sm.beatsShownInAdvance * LIMIT_MODIFIER; //limit used to be just 2f, but I think that's unbalanced with the scroll speed modifier.
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Show SpriteRenderer
-        if (Input.GetKey(keyToPress) || Input.GetKeyDown(keyToPress))
+        if (!GameManager2._i.isPause)
         {
-            transform.GetComponent<SpriteRenderer>().color = transform.GetComponent<SpriteRenderer>().color = new Color(transform.GetComponent<SpriteRenderer>().color.r, transform.GetComponent<SpriteRenderer>().color.b, transform.GetComponent<SpriteRenderer>().color.g, .75f);
-        }
-        else
-        {
-            transform.GetComponent<SpriteRenderer>().color = transform.GetComponent<SpriteRenderer>().color = new Color(transform.GetComponent<SpriteRenderer>().color.r, transform.GetComponent<SpriteRenderer>().color.b, transform.GetComponent<SpriteRenderer>().color.g, 0);
-        }
-        if (noteList.Count != 0)
-        {
-            GameObject firstNote = noteList.First.Value;
-            NoteObject2 n = firstNote.GetComponent<NoteObject2>();
-            firstNoteBeat = n.beatOfThisNote;
-
-            //regular hit
-            if (Input.GetKeyDown(keyToPress) && n.noteType == GameManager2.NOTE_NORMAL)
+            //Show SpriteRenderer
+            if (Input.GetKey(keyToPress) || Input.GetKeyDown(keyToPress))
             {
-                if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
-                {
-                    noteHit(n);
-                    //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
-                    noteList.RemoveFirst();
-                    Destroy(firstNote);
-                }
+                transform.GetComponent<SpriteRenderer>().color = transform.GetComponent<SpriteRenderer>().color = new Color(transform.GetComponent<SpriteRenderer>().color.r, transform.GetComponent<SpriteRenderer>().color.b, transform.GetComponent<SpriteRenderer>().color.g, .75f);
             }
-
-            //long hit hold
-            if (Input.GetKey(keyToPress) && n.noteType == GameManager2.NOTE_HOLD && n.isHit == false)
+            else
             {
-                if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
-                {
-                    noteHit(n);
-                    //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
-                    n.isHit = true;
-                    n.pauseAtJudgeBar = true;
-                    noteTemp = firstNote;
-                    noteList.RemoveFirst();
-                }
+                transform.GetComponent<SpriteRenderer>().color = transform.GetComponent<SpriteRenderer>().color = new Color(transform.GetComponent<SpriteRenderer>().color.r, transform.GetComponent<SpriteRenderer>().color.b, transform.GetComponent<SpriteRenderer>().color.g, 0);
             }
-
-            //long hit release
-            if (!Input.GetKey(keyToPress) && n.noteType == GameManager2.NOTE_RELEASE && noteTemp != null)
+            if (noteList.Count != 0)
             {
-                if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit && noteTemp.GetComponent<NoteObject2>().isHit == true)
-                {
-                    noteHit(n);
-                    //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
-                    noteList.RemoveFirst();
-                    
-                    Destroy(firstNote);
-                    Destroy(noteTemp);
+                GameObject firstNote = noteList.First.Value;
+                NoteObject2 n = firstNote.GetComponent<NoteObject2>();
+                firstNoteBeat = n.beatOfThisNote;
 
-                }
-                else
+                //regular hit
+                if (Input.GetKeyDown(keyToPress) && n.noteType == GameManager2.NOTE_NORMAL)
                 {
-                    //Miss Release
+                    if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
+                    {
+                        noteHit(n);
+                        //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
+                        noteList.RemoveFirst();
+                        Destroy(firstNote);
+                    }
+                }
+
+                //long hit hold
+                if (Input.GetKeyDown(keyToPress) && n.noteType == GameManager2.NOTE_HOLD && n.isHit == false)
+                {
+                    if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
+                    {
+                        noteHit(n);
+                        //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
+                        n.isHit = true;
+                        n.pauseAtJudgeBar = true;
+                        noteTemp = firstNote;
+                        noteList.RemoveFirst();
+                    }
+                }
+
+                //long hit release
+                if (!Input.GetKey(keyToPress) && n.noteType == GameManager2.NOTE_RELEASE && noteTemp != null)
+                {
+                    if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit && noteTemp.GetComponent<NoteObject2>().isHit == true)
+                    {
+                        noteHit(n);
+                        //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
+                        noteList.RemoveFirst();
+
+                        Destroy(firstNote);
+                        Destroy(noteTemp);
+
+                    }
+                    else
+                    {
+                        //Miss Release
+                        GameManager2._i.resetCombo();
+                        // AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                        GameManager2._i.setAccuracyDisplay("MISS");
+                        GameManager2._i.increaseScore(0);
+                        Destroy(noteTemp);
+                    }
+                }
+
+                //Note Miss
+                if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
+                {
+                    //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
                     GameManager2._i.resetCombo();
-                    // AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
+                    //AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
                     GameManager2._i.setAccuracyDisplay("MISS");
-                    Destroy(noteTemp);
-                }
-            }
-
-            //Note Miss
-            if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
-            {
-                //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
-                GameManager2._i.resetCombo();
-                //AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                GameManager2._i.setAccuracyDisplay("MISS");
-                noteList.RemoveFirst();
-                Destroy(firstNote);
-                if(noteTemp != null)
-                {
-                    Destroy(noteTemp);
+                    GameManager2._i.increaseScore(0);
+                    noteList.RemoveFirst();
+                    Destroy(firstNote);
+                    if (noteTemp != null)
+                    {
+                        Destroy(noteTemp);
+                    }
                 }
             }
         }
@@ -121,7 +126,7 @@ public class LaneController : MonoBehaviour
             noteScoreString = "!MIKAN!";
         }
         else if(n.beatOfThisNote < sm.songPosInBeats)
-            noteScoreString = "SLOW" + noteScore.ToString();
+            noteScoreString = "SLOW " + noteScore.ToString();
         else
             noteScoreString = "FAST " + noteScore.ToString();
 

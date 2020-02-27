@@ -12,6 +12,7 @@ public class SongManager : MonoBehaviour
     
     //testing
     public float audioSourceTime;
+    public float lastAudioSourceTime;
     public float audioDSPTime;
 
     //song's current position in beats
@@ -109,7 +110,11 @@ public class SongManager : MonoBehaviour
             lanes[i] = l;
         }
         secPerBeat = 60f / bpm;
-        dsptimesong = (float)AudioSettings.dspTime;
+        //dsptimesong = (float)AudioSettings.dspTime;
+        //testing out sync stuff
+        dsptimesong = (float)AudioSettings.dspTime - offset;
+        lastAudioSourceTime = 0;
+        
         GetComponent<AudioSource>().Play();
     }
 
@@ -118,7 +123,17 @@ public class SongManager : MonoBehaviour
     {
         if (!isPause)
         {
-            songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
+            //songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
+            //testing out sync stuff
+            songPosition += (float)AudioSettings.dspTime - dsptimesong;
+            dsptimesong = (float)AudioSettings.dspTime;
+            if (lastAudioSourceTime != GetComponent<AudioSource>().time)
+            {
+                songPosition = (songPosition + (GetComponent<AudioSource>().time - offset)) / 2;
+                lastAudioSourceTime = GetComponent<AudioSource>().time;
+            }
+            
+
             songPosInBeats = songPosition / secPerBeat;
             audioSourceTime = GetComponent<AudioSource>().time;
             audioDSPTime = (float)AudioSettings.dspTime;
@@ -146,10 +161,29 @@ public class SongManager : MonoBehaviour
                     noteType = (int)notesInLane[nextIndex][1];
 
                 }
-                if(noteType != 0)
+
+                if (noteType != 0)
                 {
                     GameObject n = (GameObject)Instantiate(note);
-                
+
+                    //note color code
+                    switch (laneIdx)
+                    {
+                        case 1:
+                            n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                            break;
+                        case 2:
+                            if(notes.Length == 4)
+                                n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                            break;
+                        case 4:
+                            if (notes.Length == 6)
+                                n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                            break;
+                        default:
+                            break;
+                    }
+
                     //resize each note to scale with judgement bar and number of lanes
                     n.transform.localScale -= new Vector3(n.transform.localScale.x * (1 - (judgementBar_width / notes.Length)), 0, 0);
 

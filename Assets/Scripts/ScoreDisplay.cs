@@ -21,9 +21,21 @@ public class ScoreDisplay : MonoBehaviour
         textMesh.SetText("Score = 0");
     }
 
-    public void setScoreDisplay(float score)
+    public void setScoreDisplay(double score, int[] accuracyTrackers)
     {
-        textMesh.SetText("Score = "+score.ToString());
+        textMesh.SetText("Score = "+score.ToString()
+                        +"\n !MIKAN! = " + accuracyTrackers[10]
+                        + "\n 90 = " + accuracyTrackers[9]
+                        + "\n 80 = " + accuracyTrackers[8]
+                        + "\n 70 = " + accuracyTrackers[7]
+                        + "\n 60 = " + accuracyTrackers[6]
+                        + "\n 50 = " + accuracyTrackers[5]
+                        + "\n 40 = " + accuracyTrackers[4]
+                        + "\n 30 = " + accuracyTrackers[3]
+                        + "\n 20 = " + accuracyTrackers[2]
+                        + "\n 10 = " + accuracyTrackers[1]
+                        + "\n 0 = " + accuracyTrackers[0]
+                        );
         textMesh.color = origColor;
         textColor = textMesh.color;
         transform.localScale = origScale;

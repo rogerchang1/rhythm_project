@@ -12,11 +12,13 @@ public class GameManager2 : MonoBehaviour
 
     public int characterScoreModifier;
 
-    public float scoreCounter;
+    public double scoreCounter;
 
     public const int NOTE_NORMAL = 1;
     public const int NOTE_HOLD = 2;
     public const int NOTE_RELEASE = 3;
+
+    public int[] accuracyTrackers;
 
     public KeyCode pause;
     public bool isPause;
@@ -37,6 +39,7 @@ public class GameManager2 : MonoBehaviour
         scoreCounter = 0;
         isPause = false;
         characterScoreModifier = 0;
+        accuracyTrackers = new int[11];
     }
 
     // Update is called once per frame
@@ -75,8 +78,10 @@ public class GameManager2 : MonoBehaviour
 
     public void increaseScore(float laneModifier)
     {
-        scoreCounter += (float)System.Math.Round((laneModifier/100f) * (SCORE_POINT+characterScoreModifier));
-        scoreDisplay.GetComponent<ScoreDisplay>().setScoreDisplay(scoreCounter);
+        scoreCounter += (double)(laneModifier/100f) * (SCORE_POINT+characterScoreModifier);
+        Debug.Log(laneModifier);
+        accuracyTrackers[((int)laneModifier/10)]++;
+        scoreDisplay.GetComponent<ScoreDisplay>().setScoreDisplay(scoreCounter, accuracyTrackers);
     }
 
 }
