@@ -28,7 +28,7 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager2._i.comboCounter >= 50)
+        if(GameManager2._i.comboCounter >= 2)
         {
 
             GameManager2._i.characterScoreModifier = 1;
@@ -37,7 +37,8 @@ public class CharacterController : MonoBehaviour
                 spriteIsActive = true;
                 disappearTimer = DISAPPEAR_TIMER_MAX;
                 transform.position = origPosition;
-                spriteRender.color = new Color(1f, 1f, 1f, 0f);
+                spriteColor.a = .01f;
+                spriteRender.color = spriteColor;
             }
         }
         else
@@ -46,7 +47,7 @@ public class CharacterController : MonoBehaviour
             spriteIsActive = false;
         }
 
-        if (spriteIsActive)
+        if (spriteRender.color.a > 0)
         {
             
             //spriteRender.color = origColor;
