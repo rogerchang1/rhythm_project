@@ -28,10 +28,10 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager2._i.comboCounter >= 2)
+        if(LevelManager._i.comboCounter >= 2)
         {
 
-            GameManager2._i.characterScoreModifier = 1;
+            LevelManager._i.characterScoreModifier = 1;
             if (!spriteIsActive)
             {
                 spriteIsActive = true;
@@ -43,7 +43,7 @@ public class CharacterController : MonoBehaviour
         }
         else
         {
-            GameManager2._i.characterScoreModifier = 0;
+            LevelManager._i.characterScoreModifier = 0;
             spriteIsActive = false;
         }
 

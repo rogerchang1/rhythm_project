@@ -58,7 +58,7 @@ public class SongManager : MonoBehaviour
         notes = transform.GetComponent<BeatMapParser>().notes;
         nextIndexArr = new int[notes.Length];
         lanes = new GameObject[notes.Length];
-        GameObject judgementBar = GameManager2._i.judgementBar;
+        GameObject judgementBar = LevelManager._i.judgementBar;
         judgementBar_width = judgementBar.GetComponent<SpriteRenderer>().bounds.size.x;
         judgementBar_xPos_left = judgementBar.GetComponent<RectTransform>().transform.position.x - (judgementBar_width / 2);
         judgementBar_yPos = judgementBar.GetComponent<RectTransform>().transform.position.y;
@@ -116,6 +116,7 @@ public class SongManager : MonoBehaviour
         lastAudioSourceTime = 0;
         
         GetComponent<AudioSource>().Play();
+        LevelManager._i.songActive = true;
     }
 
     // Update is called once per frame
@@ -191,15 +192,15 @@ public class SongManager : MonoBehaviour
 
                     switch (noteType)
                     {
-                        case GameManager2.NOTE_NORMAL:
+                        case LevelManager.NOTE_NORMAL:
                             n.GetComponent<NoteObject2>().noteType = noteType;
                             break;
-                        case GameManager2.NOTE_HOLD:
+                        case LevelManager.NOTE_HOLD:
                             n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
-                            n.GetComponent<NoteObject2>().noteType = GameManager2.NOTE_HOLD;
+                            n.GetComponent<NoteObject2>().noteType = LevelManager.NOTE_HOLD;
                             n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
                             break;
-                        case GameManager2.NOTE_RELEASE:
+                        case LevelManager.NOTE_RELEASE:
                             n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
                             n.GetComponent<NoteObject2>().noteType = noteType;
                             n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "release";
@@ -235,7 +236,8 @@ public class SongManager : MonoBehaviour
         else
         {
             isPause = false;
-            dsptimesong = (float)AudioSettings.dspTime - songPosition - offset;
+            //dsptimesong = (float)AudioSettings.dspTime - songPosition - offset;
+            dsptimesong = (float)AudioSettings.dspTime;
             GetComponent<AudioSource>().Play();
         }
     }

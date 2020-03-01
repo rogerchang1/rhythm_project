@@ -24,7 +24,7 @@ public class LaneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager2._i.isPause)
+        if (!LevelManager._i.isPause)
         {
             //Show SpriteRenderer
             if (Input.GetKey(keyToPress) || Input.GetKeyDown(keyToPress))
@@ -42,7 +42,7 @@ public class LaneController : MonoBehaviour
                 firstNoteBeat = n.beatOfThisNote;
 
                 //regular hit
-                if (Input.GetKeyDown(keyToPress) && n.noteType == GameManager2.NOTE_NORMAL)
+                if (Input.GetKeyDown(keyToPress) && n.noteType == LevelManager.NOTE_NORMAL)
                 {
                     if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                     {
@@ -54,7 +54,7 @@ public class LaneController : MonoBehaviour
                 }
 
                 //long hit hold
-                if (Input.GetKeyDown(keyToPress) && n.noteType == GameManager2.NOTE_HOLD && n.isHit == false)
+                if (Input.GetKeyDown(keyToPress) && n.noteType == LevelManager.NOTE_HOLD && n.isHit == false)
                 {
                     if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                     {
@@ -68,7 +68,7 @@ public class LaneController : MonoBehaviour
                 }
 
                 //long hit release
-                if (!Input.GetKey(keyToPress) && n.noteType == GameManager2.NOTE_RELEASE && noteTemp != null)
+                if (!Input.GetKey(keyToPress) && n.noteType == LevelManager.NOTE_RELEASE && noteTemp != null)
                 {
                     if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit && noteTemp.GetComponent<NoteObject2>().isHit == true)
                     {
@@ -83,10 +83,10 @@ public class LaneController : MonoBehaviour
                     else
                     {
                         //Miss Release
-                        GameManager2._i.resetCombo();
+                        LevelManager._i.resetCombo();
                         // AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                        GameManager2._i.setAccuracyDisplay("MISS");
-                        GameManager2._i.increaseScore(0);
+                        LevelManager._i.setAccuracyDisplay("MISS");
+                        LevelManager._i.increaseScore(0);
                         Destroy(noteTemp);
                     }
                 }
@@ -95,10 +95,10 @@ public class LaneController : MonoBehaviour
                 if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
                 {
                     //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
-                    GameManager2._i.resetCombo();
+                    LevelManager._i.resetCombo();
                     //AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                    GameManager2._i.setAccuracyDisplay("MISS");
-                    GameManager2._i.increaseScore(0);
+                    LevelManager._i.setAccuracyDisplay("MISS");
+                    LevelManager._i.increaseScore(0);
                     noteList.RemoveFirst();
                     Destroy(firstNote);
                     if (noteTemp != null)
@@ -131,9 +131,9 @@ public class LaneController : MonoBehaviour
             noteScoreString = "FAST " + noteScore.ToString();
 
         //AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
-        GameManager2._i.increaseCombo();
-        GameManager2._i.increaseScore(noteScore);
-        GameManager2._i.setAccuracyDisplay(noteScoreString);
+        LevelManager._i.increaseCombo();
+        LevelManager._i.increaseScore(noteScore);
+        LevelManager._i.setAccuracyDisplay(noteScoreString);
 
     }
 

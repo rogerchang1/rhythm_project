@@ -43,7 +43,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 221218164ddcdeb4d8dd32f46e854424, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ac024f2a930fca04a8b1c00aa2f786f1, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   songPosition: 0
   audioSourceTime: 0
+  lastAudioSourceTime: 0
   audioDSPTime: 0
   songPosInBeats: 0
   dsptimesong: 0
@@ -151,8 +152,6 @@ MonoBehaviour:
   beatsShownInAdvance: 4
   note: {fileID: 4285126948979157551, guid: 9d3a313077dfba54fa88405aec502fd8, type: 3}
   lane: {fileID: 4376186794955273663, guid: 5e909af437a5be146852aff645427572, type: 3}
-  judgementBar: {fileID: 1050639743594064481, guid: 170b07b4ba1ca00498be41b53b4232fc,
-    type: 3}
   isPause: 0
   speedUp: 303
   speedDown: 304
