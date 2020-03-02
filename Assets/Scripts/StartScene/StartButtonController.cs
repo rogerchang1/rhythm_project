@@ -22,6 +22,6 @@ public class StartButtonController : MonoBehaviour
     public void LoadLevel()
     {
         Debug.Log("Scene2 loading: ");
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("LevelScene");
     }
 }

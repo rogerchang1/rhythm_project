@@ -33,7 +33,8 @@ public class LevelManager : MonoBehaviour
         accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
         scoreDisplay = (GameObject)Instantiate(scoreDisplay);
         judgementBar = (GameObject)Instantiate(judgementBar);
-        songObject = (GameObject)Instantiate(songObject);
+        //songObject = (GameObject)Instantiate(songObject);
+        songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
         characterTest = (GameObject)Instantiate(characterTest);
         comboCounter = 0;
         maxComboCounter = 0;
@@ -47,7 +48,11 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (songActive)
+        if (!songActive && Input.anyKeyDown)
+        {
+            songObject.GetComponent<SongManager>().startSong();
+        }
+        else if (songActive)
         {
             if (Input.GetKeyDown(pause))
             {
@@ -78,6 +83,7 @@ public class LevelManager : MonoBehaviour
                 }
 
                 songActive = false;
+                GameManager._gm.LoadStart();
             }
         }
     }

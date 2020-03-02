@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8344162616055574528}
   - component: {fileID: 2872485676517780887}
   m_Layer: 0
-  m_Name: GameManager2
+  m_Name: LevelManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,5 +43,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4f5ae8f1cae6a44bac96553a839e8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  comboDisplay: {fileID: 7525281040355417132, guid: 7e4f41acb41af564d903eeab802fec73,
+  comboDisplay: {fileID: 7587486331432736801, guid: 7e4f41acb41af564d903eeab802fec73,
     type: 3}
+  accuracyDisplay: {fileID: 8681988653936313886, guid: f87034083e330ae4792a0ad20467f718,
+    type: 3}
+  scoreDisplay: {fileID: 8516213979441565689, guid: 8d227415b3998e644ae503b055964b28,
+    type: 3}
+  songObject: {fileID: 0}
+  judgementBar: {fileID: 1050639743594064481, guid: 170b07b4ba1ca00498be41b53b4232fc,
+    type: 3}
+  characterTest: {fileID: 3086358481936982356, guid: e436a0f341a2f6349b9c5f1232a80b73,
+    type: 3}
+  comboCounter: 0
+  maxComboCounter: 0
+  characterScoreModifier: 0
+  scoreCounter: 0
+  accuracyTrackers: 
+  pause: 0
+  isPause: 0
+  songActive: 0

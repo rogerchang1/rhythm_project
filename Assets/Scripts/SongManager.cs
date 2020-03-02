@@ -62,6 +62,7 @@ public class SongManager : MonoBehaviour
         judgementBar_width = judgementBar.GetComponent<SpriteRenderer>().bounds.size.x;
         judgementBar_xPos_left = judgementBar.GetComponent<RectTransform>().transform.position.x - (judgementBar_width / 2);
         judgementBar_yPos = judgementBar.GetComponent<RectTransform>().transform.position.y;
+        secPerBeat = 60f / bpm;
 
         for (int i = 0; i < notes.Length; i++)
         {
@@ -109,122 +110,120 @@ public class SongManager : MonoBehaviour
             }
             lanes[i] = l;
         }
-        secPerBeat = 60f / bpm;
-        //dsptimesong = (float)AudioSettings.dspTime;
-        //testing out sync stuff
-        dsptimesong = (float)AudioSettings.dspTime - offset;
-        lastAudioSourceTime = 0;
-        
-        GetComponent<AudioSource>().Play();
-        LevelManager._i.songActive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isPause)
-        {
-            //songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
-            //testing out sync stuff
-            songPosition += (float)AudioSettings.dspTime - dsptimesong;
-            dsptimesong = (float)AudioSettings.dspTime;
-            if (lastAudioSourceTime != GetComponent<AudioSource>().time)
+        if (LevelManager._i.songActive)
+        { 
+            if (!isPause)
             {
-                songPosition = (songPosition + (GetComponent<AudioSource>().time - offset)) / 2;
-                lastAudioSourceTime = GetComponent<AudioSource>().time;
-            }
-            
-
-            songPosInBeats = songPosition / secPerBeat;
-            audioSourceTime = GetComponent<AudioSource>().time;
-            audioDSPTime = (float)AudioSettings.dspTime;
-        }
-
-        if (Input.GetKeyDown(speedUp))
-        {
-            beatsShownInAdvance -= 1;
-        }
-        if (Input.GetKeyDown(speedDown))
-        {
-            beatsShownInAdvance += 1;
-        }
-
-        for (int laneIdx = 0; laneIdx < notes.Length; laneIdx++)
-        {
-
-            float[][] notesInLane = notes[laneIdx];
-            int nextIndex = nextIndexArr[laneIdx];
-            if (nextIndex < notesInLane.Length && notesInLane[nextIndex][0] < songPosInBeats + beatsShownInAdvance)
-            {
-                int noteType = 0;
-                if (notesInLane[nextIndex].Length == 2)
+                //songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
+                //testing out sync stuff
+                songPosition += (float)AudioSettings.dspTime - dsptimesong;
+                dsptimesong = (float)AudioSettings.dspTime;
+                if (lastAudioSourceTime != GetComponent<AudioSource>().time)
                 {
-                    noteType = (int)notesInLane[nextIndex][1];
-
+                    songPosition = (songPosition + (GetComponent<AudioSource>().time - offset)) / 2;
+                    lastAudioSourceTime = GetComponent<AudioSource>().time;
                 }
+                songPosInBeats = songPosition / secPerBeat;
+                audioSourceTime = GetComponent<AudioSource>().time;
+                audioDSPTime = (float)AudioSettings.dspTime;
 
-                if (noteType != 0)
+                for (int laneIdx = 0; laneIdx < notes.Length; laneIdx++)
                 {
-                    GameObject n = (GameObject)Instantiate(note);
 
-                    //note color code
-                    switch (laneIdx)
+                    float[][] notesInLane = notes[laneIdx];
+                    int nextIndex = nextIndexArr[laneIdx];
+                    if (nextIndex < notesInLane.Length && notesInLane[nextIndex][0] < songPosInBeats + beatsShownInAdvance)
                     {
-                        case 1:
-                            n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
-                            break;
-                        case 2:
-                            if(notes.Length == 4)
-                                n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
-                            break;
-                        case 4:
-                            if (notes.Length == 6)
-                                n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
-                            break;
-                        default:
-                            break;
+                        int noteType = 0;
+                        if (notesInLane[nextIndex].Length == 2)
+                        {
+                            noteType = (int)notesInLane[nextIndex][1];
+
+                        }
+
+                        if (noteType != 0)
+                        {
+                            GameObject n = (GameObject)Instantiate(note);
+
+                            //note color code
+                            switch (laneIdx)
+                            {
+                                case 1:
+                                    n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                    break;
+                                case 2:
+                                    if (notes.Length == 4)
+                                        n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                    break;
+                                case 4:
+                                    if (notes.Length == 6)
+                                        n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            //resize each note to scale with judgement bar and number of lanes
+                            n.transform.localScale -= new Vector3(n.transform.localScale.x * (1 - (judgementBar_width / notes.Length)), 0, 0);
+
+                            //if it's a hold note, indicate if it's hold or release.
+
+                            switch (noteType)
+                            {
+                                case LevelManager.NOTE_NORMAL:
+                                    n.GetComponent<NoteObject2>().noteType = noteType;
+                                    break;
+                                case LevelManager.NOTE_HOLD:
+                                    n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
+                                    n.GetComponent<NoteObject2>().noteType = LevelManager.NOTE_HOLD;
+                                    n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
+                                    break;
+                                case LevelManager.NOTE_RELEASE:
+                                    n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
+                                    n.GetComponent<NoteObject2>().noteType = noteType;
+                                    n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "release";
+                                    break;
+                                default:
+                                    n.GetComponent<NoteObject2>().noteType = noteType;
+                                    break;
+                            }
+
+                            //initialize the fields of the music note
+                            n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + GameManager.calibration;
+                            n.GetComponent<NoteObject2>().sm = this;
+                            n.GetComponent<NoteObject2>().lane = laneIdx;
+                            float lanePos = lanes[laneIdx].transform.position.x;
+                            n.GetComponent<NoteObject2>().spawnPos = new Vector2(lanePos, judgementBar_yPos + 9f); //arbitrarily 9f... because.. I don't know.
+                            n.GetComponent<NoteObject2>().judgePos = new Vector2(lanePos, judgementBar_yPos);
+                            n.GetComponent<NoteObject2>().removePos = new Vector2(lanePos, judgementBar_yPos - 9f);
+                            lanes[laneIdx].GetComponent<LaneController>().noteList.AddLast(n);
+                        }
+                        nextIndexArr[laneIdx] = nextIndex + 1;
                     }
-
-                    //resize each note to scale with judgement bar and number of lanes
-                    n.transform.localScale -= new Vector3(n.transform.localScale.x * (1 - (judgementBar_width / notes.Length)), 0, 0);
-
-                    //if it's a hold note, indicate if it's hold or release.
-
-                    switch (noteType)
-                    {
-                        case LevelManager.NOTE_NORMAL:
-                            n.GetComponent<NoteObject2>().noteType = noteType;
-                            break;
-                        case LevelManager.NOTE_HOLD:
-                            n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
-                            n.GetComponent<NoteObject2>().noteType = LevelManager.NOTE_HOLD;
-                            n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
-                            break;
-                        case LevelManager.NOTE_RELEASE:
-                            n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
-                            n.GetComponent<NoteObject2>().noteType = noteType;
-                            n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "release";
-                            break;
-                        default:
-                            n.GetComponent<NoteObject2>().noteType = noteType;
-                            break;
-                    }
-
-                    //initialize the fields of the music note
-                    n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1;                
-                    n.GetComponent<NoteObject2>().sm = this;
-                    n.GetComponent<NoteObject2>().lane = laneIdx;
-                    float lanePos = lanes[laneIdx].transform.position.x;
-                    n.GetComponent<NoteObject2>().spawnPos = new Vector2(lanePos, judgementBar_yPos + 9f); //arbitrarily 9f... because.. I don't know.
-                    n.GetComponent<NoteObject2>().judgePos = new Vector2(lanePos, judgementBar_yPos);
-                    n.GetComponent<NoteObject2>().removePos = new Vector2(lanePos, judgementBar_yPos - 9f);
-                    lanes[laneIdx].GetComponent<LaneController>().noteList.AddLast(n);
                 }
-                nextIndexArr[laneIdx] = nextIndex + 1;
             }
+            if (Input.GetKeyDown(speedUp) && beatsShownInAdvance > 1)
+                beatsShownInAdvance -= 1;
+            if (Input.GetKeyDown(speedDown) && beatsShownInAdvance < 20)
+                beatsShownInAdvance += 1;
         }
     }
 
+    public void startSong()
+    {
+        //dsptimesong = (float)AudioSettings.dspTime;
+        //testing out sync stuff
+        dsptimesong = (float)AudioSettings.dspTime - offset;
+        lastAudioSourceTime = 0;
+
+        GetComponent<AudioSource>().Play();
+        LevelManager._i.songActive = true;
+    }
     public void pauseSong(bool pause)
     {
         isPause = pause; 
