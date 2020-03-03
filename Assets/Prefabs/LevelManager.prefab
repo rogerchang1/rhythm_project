@@ -54,6 +54,8 @@ MonoBehaviour:
     type: 3}
   characterTest: {fileID: 3086358481936982356, guid: e436a0f341a2f6349b9c5f1232a80b73,
     type: 3}
+  startText: {fileID: 3650724522130939020, guid: 8f9e35b096a3dc644b647d758fdb3116,
+    type: 3}
   comboCounter: 0
   maxComboCounter: 0
   characterScoreModifier: 0

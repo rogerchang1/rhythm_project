@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
 {
     
     public static LevelManager _i;
-    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest;
+    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText;
     public int comboCounter, maxComboCounter;
 
     public int characterScoreModifier;
@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
         //songObject = (GameObject)Instantiate(songObject);
         songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
         characterTest = (GameObject)Instantiate(characterTest);
+        startText = (GameObject)Instantiate(startText);
         comboCounter = 0;
         maxComboCounter = 0;
         scoreCounter = 0;
@@ -51,6 +52,7 @@ public class LevelManager : MonoBehaviour
         if (!songActive && Input.anyKeyDown)
         {
             songObject.GetComponent<SongManager>().startSong();
+            Destroy(startText);
         }
         else if (songActive)
         {
