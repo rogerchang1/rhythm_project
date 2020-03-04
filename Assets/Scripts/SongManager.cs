@@ -110,6 +110,7 @@ public class SongManager : MonoBehaviour
             }
             lanes[i] = l;
         }
+
     }
 
     // Update is called once per frame

@@ -44,6 +44,7 @@ public class LevelManager : MonoBehaviour
         songActive = false;
         characterScoreModifier = 0;
         accuracyTrackers = new int[11];
+        startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
     }
 
     // Update is called once per frame

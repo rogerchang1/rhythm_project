@@ -28,7 +28,7 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(LevelManager._i.comboCounter >= 2)
+        if(LevelManager._i.comboCounter >= 10)
         {
 
             LevelManager._i.characterScoreModifier = 1;
