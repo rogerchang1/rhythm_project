@@ -24,6 +24,7 @@ public class CalibrationSliderController : MonoBehaviour
 
     public void setText(float c)
     {
-        textMesh.SetText("Calibration : " + (Mathf.Round(c * 10f) / 10f).ToString());
+        //textMesh.SetText("Calibration : " + (Mathf.Round(c * 10f) / 10f).ToString());
+        textMesh.SetText("Calibration : " + (Mathf.Round(c * 1000f) / 1000f).ToString());
     }
 }

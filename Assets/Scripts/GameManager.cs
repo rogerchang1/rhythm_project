@@ -30,6 +30,6 @@ public class GameManager : MonoBehaviour
 
     public void setCalibration(float c)
     {
-        calibration = Mathf.Round(c*10f)/10f;
+        calibration = Mathf.Round(c*1000f)/1000f;
     }
 }

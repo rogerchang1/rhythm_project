@@ -120,15 +120,15 @@ public class SongManager : MonoBehaviour
         { 
             if (!isPause)
             {
-                //songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
+                songPosition = (float)AudioSettings.dspTime - dsptimesong - offset;
                 //testing out sync stuff
-                songPosition += (float)AudioSettings.dspTime - dsptimesong;
+                /*songPosition += (float)AudioSettings.dspTime - dsptimesong;
                 dsptimesong = (float)AudioSettings.dspTime;
                 if (lastAudioSourceTime != GetComponent<AudioSource>().time)
                 {
                     songPosition = (songPosition + (GetComponent<AudioSource>().time - offset)) / 2;
                     lastAudioSourceTime = GetComponent<AudioSource>().time;
-                }
+                }*/
                 songPosInBeats = songPosition / secPerBeat;
                 audioSourceTime = GetComponent<AudioSource>().time;
                 audioDSPTime = (float)AudioSettings.dspTime;
@@ -195,7 +195,7 @@ public class SongManager : MonoBehaviour
                             }
 
                             //initialize the fields of the music note
-                            n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + GameManager.calibration;
+                            n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + (GameManager.calibration/secPerBeat);
                             n.GetComponent<NoteObject2>().sm = this;
                             n.GetComponent<NoteObject2>().lane = laneIdx;
                             float lanePos = lanes[laneIdx].transform.position.x;
@@ -236,8 +236,8 @@ public class SongManager : MonoBehaviour
         else
         {
             isPause = false;
-            //dsptimesong = (float)AudioSettings.dspTime - songPosition - offset;
-            dsptimesong = (float)AudioSettings.dspTime;
+            dsptimesong = (float)AudioSettings.dspTime - songPosition - offset;
+            //dsptimesong = (float)AudioSettings.dspTime;
             GetComponent<AudioSource>().Play();
         }
     }
