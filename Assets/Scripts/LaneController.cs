@@ -59,7 +59,6 @@ public class LaneController : MonoBehaviour
                     if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit)
                     {
                         noteHit(n);
-                        //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                         n.isHit = true;
                         n.pauseAtJudgeBar = true;
                         noteTemp = firstNote;
@@ -73,7 +72,6 @@ public class LaneController : MonoBehaviour
                     if (Mathf.Abs(n.beatOfThisNote - sm.songPosInBeats) <= limit && noteTemp.GetComponent<NoteObject2>().isHit == true)
                     {
                         noteHit(n);
-                        //Instantiate(HitEffect, firstNote.transform.position, HitEffect.transform.rotation);
                         noteList.RemoveFirst();
 
                         Destroy(firstNote);
@@ -83,10 +81,7 @@ public class LaneController : MonoBehaviour
                     else
                     {
                         //Miss Release
-                        LevelManager._i.resetCombo();
-                        // AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                        LevelManager._i.setAccuracyDisplay("MISS");
-                        LevelManager._i.increaseScore(0);
+                        noteMiss();
                         Destroy(noteTemp);
                     }
                 }
@@ -94,11 +89,7 @@ public class LaneController : MonoBehaviour
                 //Note Miss
                 if (sm.songPosInBeats - n.beatOfThisNote > limit && n.isHit == false)
                 {
-                    //Instantiate(MissEffect, transform.position + new Vector3(0f,2f,0), MissEffect.transform.rotation);
-                    LevelManager._i.resetCombo();
-                    //AccuracyPopup.Create(new Vector3(0, 1, 0), "MISS");
-                    LevelManager._i.setAccuracyDisplay("MISS");
-                    LevelManager._i.increaseScore(0);
+                    noteMiss();
                     noteList.RemoveFirst();
                     Destroy(firstNote);
                     if (noteTemp != null)
@@ -134,7 +125,14 @@ public class LaneController : MonoBehaviour
         LevelManager._i.increaseCombo();
         LevelManager._i.increaseScore(noteScore);
         LevelManager._i.setAccuracyDisplay(noteScoreString);
+    }
 
+    private void noteMiss()
+    {
+        LevelManager._i.resetCombo();
+        LevelManager._i.setAccuracyDisplay("MISS");
+        LevelManager._i.increaseScore(0);
+        LevelManager._i.deductHealth();
     }
 
 }

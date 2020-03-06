@@ -8,6 +8,8 @@ TagManager:
   - HoldReleaseTag
   - BeatTextTag
   - LaneTag
+  - UICanvasTag
+  - HealthBarTag
   layers:
   - Default
   - TransparentFX

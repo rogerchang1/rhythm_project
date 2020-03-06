@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
 {
     
     public static LevelManager _i;
-    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText;
+    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar;
     public int comboCounter, maxComboCounter;
 
     public int characterScoreModifier;
@@ -45,6 +45,7 @@ public class LevelManager : MonoBehaviour
         characterScoreModifier = 0;
         accuracyTrackers = new int[11];
         startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
+        healthBar.GetComponent<HealthBar>().setMaxHealth(100);
     }
 
     // Update is called once per frame
@@ -120,9 +121,16 @@ public class LevelManager : MonoBehaviour
     public void increaseScore(float laneModifier)
     {
         scoreCounter += (laneModifier/100f) * (SCORE_POINT+characterScoreModifier);
-        Debug.Log(laneModifier);
         accuracyTrackers[((int)laneModifier/10)]++;
         scoreDisplay.GetComponent<ScoreDisplay>().setScoreDisplay(scoreCounter, accuracyTrackers);
+    }
+
+    public void deductHealth()
+    {
+        int maxHealth = healthBar.GetComponentInChildren<HealthBar>().getMaxHealth();
+        int health = healthBar.GetComponentInChildren<HealthBar>().getHealth();
+        health -= (int)(maxHealth * .1);
+        healthBar.GetComponentInChildren<HealthBar>().setHealth(health);
     }
 
 }
