@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
 {
     
     public static LevelManager _i;
-    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar;
+    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar, feverBar;
     public int comboCounter, maxComboCounter;
 
     public int characterScoreModifier;
@@ -21,9 +21,11 @@ public class LevelManager : MonoBehaviour
     public int[] accuracyTrackers;
 
     public KeyCode pause;
-    public bool isPause, songActive;
+    public bool isPause, songActive, feverActive;
 
     private const float SCORE_POINT = 1;
+
+    public float maxFever = 100, currentFever = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -42,10 +44,12 @@ public class LevelManager : MonoBehaviour
         scoreCounter = 0;
         isPause = false;
         songActive = false;
+        feverActive = false;
         characterScoreModifier = 0;
         accuracyTrackers = new int[11];
         startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
         healthBar.GetComponent<HealthBar>().setMaxHealth(100);
+        feverBar.GetComponent<FeverBar>().setMaxFever(50);
     }
 
     // Update is called once per frame
@@ -123,6 +127,7 @@ public class LevelManager : MonoBehaviour
         scoreCounter += (laneModifier/100f) * (SCORE_POINT+characterScoreModifier);
         accuracyTrackers[((int)laneModifier/10)]++;
         scoreDisplay.GetComponent<ScoreDisplay>().setScoreDisplay(scoreCounter, accuracyTrackers);
+        increaseFever(laneModifier / 100f);
     }
 
     public void deductHealth()
@@ -131,6 +136,15 @@ public class LevelManager : MonoBehaviour
         int health = healthBar.GetComponentInChildren<HealthBar>().getHealth();
         health -= (int)(maxHealth * .1);
         healthBar.GetComponentInChildren<HealthBar>().setHealth(health);
+    }
+
+    public void increaseFever(float f)
+    {
+        if(currentFever + (2 * f) <= maxFever && !feverActive)
+        {
+            currentFever += (2 * f);
+            feverBar.GetComponentInChildren<FeverBar>().setFever(currentFever);
+        }
     }
 
 }
