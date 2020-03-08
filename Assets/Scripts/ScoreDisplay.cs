@@ -10,14 +10,12 @@ public class ScoreDisplay : MonoBehaviour
     private Color origColor;
     private Vector3 origScale;
     private const float POP_TIMER_MAX = 1f;
-    private float popTimer;
     // Start is called before the first frame update
     void Start()
     {
         textMesh = transform.GetComponent<TextMeshPro>();
         origScale = transform.localScale;
         origColor = textMesh.color;
-        popTimer = 0;
         textMesh.SetText("Score = " + 0
                         + "\n !MIKAN! = " + 0
                         + "\n 90 = " + 0
@@ -51,7 +49,6 @@ public class ScoreDisplay : MonoBehaviour
         textMesh.color = origColor;
         textColor = textMesh.color;
         transform.localScale = origScale;
-        popTimer = POP_TIMER_MAX;
     }
 
     // Update is called once per frame

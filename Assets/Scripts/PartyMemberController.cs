@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class PartyMemberController : MonoBehaviour
 {
 
     private const float DISAPPEAR_TIMER_MAX = 1f;
@@ -11,6 +11,7 @@ public class CharacterController : MonoBehaviour
     private Color origColor;
     private SpriteRenderer spriteRender;
     private bool spriteIsActive;
+    private int triggerValue, nextLimit;
     private Vector3 origPosition;
     // Start is called before the first frame update
     void Start()
@@ -21,17 +22,24 @@ public class CharacterController : MonoBehaviour
         origPosition = transform.position;
         spriteRender.color = new Color(1f, 1f, 1f, 0f);
         spriteIsActive = false;
-
-
+        triggerValue = 50;
+        nextLimit = triggerValue;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(LevelManager._i.comboCounter >= 10)
+        if (LevelManager._i.comboCounter >= triggerValue)
+        //if (true)
         {
 
-            LevelManager._i.characterScoreModifier = 1;
+            if (LevelManager._i.comboCounter >= nextLimit)
+            {
+                LevelManager._i.characterScoreModifier += 1;
+                nextLimit += triggerValue;
+                spriteIsActive = false;
+            }
+
             if (!spriteIsActive)
             {
                 spriteIsActive = true;
@@ -44,6 +52,7 @@ public class CharacterController : MonoBehaviour
         else
         {
             LevelManager._i.characterScoreModifier = 0;
+            nextLimit = triggerValue;
             spriteIsActive = false;
         }
 
@@ -53,18 +62,6 @@ public class CharacterController : MonoBehaviour
             //spriteRender.color = origColor;
             float moveXSpeed = 1f;
             transform.position += new Vector3(moveXSpeed, 0) * Time.deltaTime;
-
-            if (disappearTimer > DISAPPEAR_TIMER_MAX * .5f)
-            {
-                //First half of the popup lifetime
-                float increaseScaleAmount = 1f;
-                // transform.localScale += Vector3.one * increaseScaleAmount * Time.deltaTime;
-            }
-            else
-            {
-                float decreaseScaleAmount = 1f;
-                // transform.localScale -= Vector3.one * decreaseScaleAmount * Time.deltaTime;
-            }
 
             disappearTimer -= Time.deltaTime;
             if (disappearTimer < 0)

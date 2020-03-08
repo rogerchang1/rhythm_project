@@ -8,6 +8,15 @@ public class FeverBar : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
+
+    void Update()
+    {
+        if(slider.value == slider.maxValue)
+        {
+
+        }
+    }
+
     public void setMaxFever(float fever)
     {
         slider.maxValue = fever;

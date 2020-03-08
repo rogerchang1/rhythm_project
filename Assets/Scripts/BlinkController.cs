@@ -8,7 +8,6 @@ public class BlinkController : MonoBehaviour
     private float DISAPPEAR_TIMER = 1f;
     private float APPEAR_TIMER = 2.5f;
     private TextMeshPro textMesh;
-    private bool fade;
     public float secPerBeat;
     public float dsptimestart;
     public float dsptime;
@@ -19,7 +18,6 @@ public class BlinkController : MonoBehaviour
     void Start()
     {
         textMesh = transform.GetComponent<TextMeshPro>();
-        fade = true;
     }
 
     // Update is called once per frame
@@ -57,7 +55,6 @@ public class BlinkController : MonoBehaviour
 
     public void setTempo(float bpm)
     {
-        
         secPerBeat = 60f / bpm;
         dsptimestart = (float)AudioSettings.dspTime;
         audioPos = 0;

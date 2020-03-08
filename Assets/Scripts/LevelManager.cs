@@ -7,10 +7,10 @@ public class LevelManager : MonoBehaviour
 {
     
     public static LevelManager _i;
-    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar, feverBar;
+    public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar, feverBar, ringEffect;
     public int comboCounter, maxComboCounter;
 
-    public int characterScoreModifier;
+    public int characterScoreModifier, comboModifier;
 
     public float scoreCounter;
 
@@ -20,12 +20,13 @@ public class LevelManager : MonoBehaviour
 
     public int[] accuracyTrackers;
 
-    public KeyCode pause;
+    public KeyCode pause, activateFever;
     public bool isPause, songActive, feverActive;
 
     private const float SCORE_POINT = 1;
 
-    public float maxFever = 100, currentFever = 0;
+    public float maxFever, currentFever = 0;
+    private const float FEVER_LIMIT = 100f;
 
     // Start is called before the first frame update
     void Start()
@@ -46,10 +47,12 @@ public class LevelManager : MonoBehaviour
         songActive = false;
         feverActive = false;
         characterScoreModifier = 0;
+        comboModifier = 1;
+        maxFever = FEVER_LIMIT;
         accuracyTrackers = new int[11];
         startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
         healthBar.GetComponent<HealthBar>().setMaxHealth(100);
-        feverBar.GetComponent<FeverBar>().setMaxFever(50);
+        feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
     }
 
     // Update is called once per frame
@@ -74,6 +77,23 @@ public class LevelManager : MonoBehaviour
             else
             {
                 Time.timeScale = 1;
+            }
+
+            if (Input.GetKeyDown(activateFever) && !feverActive && currentFever >= FEVER_LIMIT)
+            {
+                feverActive = true;
+                comboModifier = 5;
+                Instantiate(ringEffect, feverBar.transform.position, feverBar.transform.rotation);
+            }
+
+            if (feverActive && currentFever >= 0){
+                currentFever -= 15f * Time.deltaTime;
+                feverBar.GetComponentInChildren<FeverBar>().setFever(currentFever);
+            }
+            else
+            {
+                feverActive = false;
+                comboModifier = 1;
             }
 
 
@@ -102,7 +122,7 @@ public class LevelManager : MonoBehaviour
 
     public void increaseCombo()
     {
-        comboCounter++;
+        comboCounter += comboModifier * 1;
         comboDisplay.GetComponent<ComboDisplay>().setComboDisplay(comboCounter);
         if(comboCounter > maxComboCounter)
             maxComboCounter = comboCounter;
@@ -140,9 +160,17 @@ public class LevelManager : MonoBehaviour
 
     public void increaseFever(float f)
     {
-        if(currentFever + (2 * f) <= maxFever && !feverActive)
+        float feverModifier = 2f;
+
+        if (feverActive)
         {
-            currentFever += (2 * f);
+            feverModifier = 1f;
+        }
+        
+        if(currentFever < maxFever)
+        {
+            currentFever += (feverModifier * f);
+            if (currentFever > maxFever) currentFever = maxFever;
             feverBar.GetComponentInChildren<FeverBar>().setFever(currentFever);
         }
     }
