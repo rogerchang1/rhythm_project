@@ -8,9 +8,9 @@ public class LevelManager : MonoBehaviour
     
     public static LevelManager _i;
     public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar, feverBar, ringEffect;
-    public int comboCounter, maxComboCounter;
+    public int comboCounter, maxComboCounter, noteCounter;
 
-    public int characterScoreModifier, comboModifier;
+    public int characterScoreModifier, comboModifier, healModifier;
 
     public float scoreCounter;
 
@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
 
     private const float SCORE_POINT = 1;
 
-    public float maxFever, currentFever = 0;
+    public float maxFever, currentFever, currentHealth, maxHealth;
     private const float FEVER_LIMIT = 100f;
 
     // Start is called before the first frame update
@@ -36,9 +36,10 @@ public class LevelManager : MonoBehaviour
         accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
         scoreDisplay = (GameObject)Instantiate(scoreDisplay);
         judgementBar = (GameObject)Instantiate(judgementBar);
+        //judgementBar = (GameObject)Instantiate(judgementBar, GameObject.FindGameObjectWithTag("UICanvasTag").transform);
         //songObject = (GameObject)Instantiate(songObject);
         songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
-        characterTest = (GameObject)Instantiate(characterTest);
+        //characterTest = (GameObject)Instantiate(characterTest);
         startText = (GameObject)Instantiate(startText);
         comboCounter = 0;
         maxComboCounter = 0;
@@ -47,11 +48,16 @@ public class LevelManager : MonoBehaviour
         songActive = false;
         feverActive = false;
         characterScoreModifier = 0;
+        healModifier = 0;
+        noteCounter = 0;
         comboModifier = 1;
         maxFever = FEVER_LIMIT;
+        currentFever = 0;
+        maxHealth = 100;
+        currentHealth = maxHealth;
         accuracyTrackers = new int[11];
         startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
-        healthBar.GetComponent<HealthBar>().setMaxHealth(100);
+        healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
         feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
     }
 
@@ -79,6 +85,7 @@ public class LevelManager : MonoBehaviour
                 Time.timeScale = 1;
             }
 
+            //ACTIVATE FEVER
             if (Input.GetKeyDown(activateFever) && !feverActive && currentFever >= FEVER_LIMIT)
             {
                 feverActive = true;
@@ -103,7 +110,6 @@ public class LevelManager : MonoBehaviour
                 Destroy(judgementBar);
                 Destroy(accuracyDisplay);
                 Destroy(comboDisplay);
-                Destroy(characterTest);
                 Destroy(songObject);
                 foreach (GameObject lane in GameObject.FindGameObjectsWithTag("LaneTag"))
                 {
@@ -155,6 +161,7 @@ public class LevelManager : MonoBehaviour
         int maxHealth = healthBar.GetComponentInChildren<HealthBar>().getMaxHealth();
         int health = healthBar.GetComponentInChildren<HealthBar>().getHealth();
         health -= (int)(maxHealth * .1);
+        currentHealth = health;
         healthBar.GetComponentInChildren<HealthBar>().setHealth(health);
     }
 
@@ -173,6 +180,12 @@ public class LevelManager : MonoBehaviour
             if (currentFever > maxFever) currentFever = maxFever;
             feverBar.GetComponentInChildren<FeverBar>().setFever(currentFever);
         }
+    }
+
+    public void healHealth(float laneModifier)
+    {
+        currentHealth += healModifier * (2 * (laneModifier / 100f));
+        healthBar.GetComponentInChildren<HealthBar>().setHealth((int)currentHealth);
     }
 
 }

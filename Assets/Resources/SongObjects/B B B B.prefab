@@ -151,7 +151,7 @@ MonoBehaviour:
   bpm: 180
   beatsShownInAdvance: 4
   note: {fileID: 4285126948979157551, guid: 9d3a313077dfba54fa88405aec502fd8, type: 3}
-  lane: {fileID: 4376186794955273663, guid: 5e909af437a5be146852aff645427572, type: 3}
+  lane: {fileID: 7512239457748035320, guid: e834caa5faf391942be0d9c6989420e9, type: 3}
   isPause: 0
   speedUp: 303
   speedDown: 304

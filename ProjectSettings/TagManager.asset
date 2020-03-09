@@ -10,6 +10,7 @@ TagManager:
   - LaneTag
   - UICanvasTag
   - HealthBarTag
+  - ModifierDisplayTag
   layers:
   - Default
   - TransparentFX

@@ -124,7 +124,9 @@ public class LaneController : MonoBehaviour
         //AccuracyPopup.Create(new Vector3(0, 1, 0), noteScoreString);
         LevelManager._i.increaseCombo();
         LevelManager._i.increaseScore(noteScore);
+        LevelManager._i.healHealth(noteScore);
         LevelManager._i.setAccuracyDisplay(noteScoreString);
+        LevelManager._i.noteCounter++;
     }
 
     private void noteMiss()
@@ -133,6 +135,7 @@ public class LaneController : MonoBehaviour
         LevelManager._i.setAccuracyDisplay("MISS");
         LevelManager._i.increaseScore(0);
         LevelManager._i.deductHealth();
+        LevelManager._i.noteCounter++;
     }
 
 }
