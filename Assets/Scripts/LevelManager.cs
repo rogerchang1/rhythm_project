@@ -21,11 +21,11 @@ public class LevelManager : MonoBehaviour
     public int[] accuracyTrackers;
 
     public KeyCode pause, activateFever;
-    public bool isPause, songActive, feverActive;
+    public bool isPause, songActive, feverActive, showResult;
 
     private const float SCORE_POINT = 1;
 
-    public float maxFever, currentFever, currentHealth, maxHealth;
+    public float maxFever, currentFever, currentHealth, maxHealth, totalAccuracy;
     private const float FEVER_LIMIT = 100f;
 
     // Start is called before the first frame update
@@ -47,6 +47,7 @@ public class LevelManager : MonoBehaviour
         isPause = false;
         songActive = false;
         feverActive = false;
+        showResult = false;
         characterScoreModifier = 0;
         healModifier = 0;
         noteCounter = 0;
@@ -54,76 +55,101 @@ public class LevelManager : MonoBehaviour
         maxFever = FEVER_LIMIT;
         currentFever = 0;
         maxHealth = 100;
+        totalAccuracy = 0;
         currentHealth = maxHealth;
         accuracyTrackers = new int[11];
         startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
         healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
         feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
+        DontDestroyOnLoad(_i);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!songActive && Input.anyKeyDown)
+        if (!showResult)
         {
-            songObject.GetComponent<SongManager>().startSong();
-            Destroy(startText);
-        }
-        else if (songActive)
-        {
-            if (Input.GetKeyDown(pause))
+            if (!songActive && Input.anyKeyDown)
             {
-                isPause = !isPause;
-                songObject.GetComponent<SongManager>().pauseSong(isPause);
+                songObject.GetComponent<SongManager>().startSong();
+                Destroy(startText);
             }
-            if (isPause)
+            else if (songActive)
             {
-                Time.timeScale = 0;
-            }
-            else
-            {
-                Time.timeScale = 1;
-            }
-
-            //ACTIVATE FEVER
-            if (Input.GetKeyDown(activateFever) && !feverActive && currentFever >= FEVER_LIMIT)
-            {
-                feverActive = true;
-                comboModifier = 5;
-                Instantiate(ringEffect, feverBar.transform.position, feverBar.transform.rotation);
-            }
-
-            if (feverActive && currentFever >= 0){
-                currentFever -= 15f * Time.deltaTime;
-                feverBar.GetComponentInChildren<FeverBar>().setFever(currentFever);
-            }
-            else
-            {
-                feverActive = false;
-                comboModifier = 1;
-            }
-
-
-            //Song Ends
-            if (songActive && songObject.GetComponent<AudioSource>().time == 0 && !songObject.GetComponent<AudioSource>().isPlaying)
-            {
-                Destroy(judgementBar);
-                Destroy(accuracyDisplay);
-                Destroy(comboDisplay);
-                Destroy(songObject);
-                foreach (GameObject lane in GameObject.FindGameObjectsWithTag("LaneTag"))
+                if (Input.GetKeyDown(pause))
                 {
-                    Destroy(lane);
+                    isPause = !isPause;
+                    songObject.GetComponent<SongManager>().pauseSong(isPause);
+                }
+                if (isPause)
+                {
+                    Time.timeScale = 0;
+                }
+                else
+                {
+                    Time.timeScale = 1;
                 }
 
-                songActive = false;
-                GameManager._gm.LoadStart();
+                //ACTIVATE FEVER
+                if (Input.GetKeyDown(activateFever) && !feverActive && currentFever >= FEVER_LIMIT)
+                {
+                    feverActive = true;
+                    comboModifier = 5;
+                    Instantiate(ringEffect, feverBar.transform.position, feverBar.transform.rotation);
+                }
+
+                if (feverActive && currentFever >= 0)
+                {
+                    currentFever -= 15f * Time.deltaTime;
+                    feverBar.GetComponentInChildren<FeverBar>().setFever(currentFever);
+                }
+                else
+                {
+                    feverActive = false;
+                    comboModifier = 1;
+                }
+
+
+                //Song Ends
+                if (songActive && songObject.GetComponent<AudioSource>().time == 0 && !songObject.GetComponent<AudioSource>().isPlaying)
+                {
+                    Destroy(judgementBar);
+                    Destroy(accuracyDisplay);
+                    Destroy(comboDisplay);
+                    Destroy(songObject);
+                    foreach (GameObject lane in GameObject.FindGameObjectsWithTag("LaneTag"))
+                    {
+                        Destroy(lane);
+                    }
+
+                    songActive = false;
+                    showResult = true;
+                    GameManager._gm.LoadResult();
+
+                }
             }
         }
     }
 
-    public void NoteHit()
+    public void NoteHit(float laneModifier, string accuracy)
     {
+        increaseCombo();
+        setAccuracyDisplay(accuracy);
+        increaseScore(laneModifier);
+        increaseFever(laneModifier / 100f);
+        healHealth(laneModifier);
+        noteCounter++;
+        calculateTotalAccuracy();
+    }
+
+    public void NoteMiss()
+    {
+        resetCombo();
+        setAccuracyDisplay("MISS");
+        increaseScore(0);
+        deductHealth();
+        noteCounter++;
+        calculateTotalAccuracy();
     }
 
     public void increaseCombo()
@@ -153,7 +179,6 @@ public class LevelManager : MonoBehaviour
         scoreCounter += (laneModifier/100f) * (SCORE_POINT+characterScoreModifier);
         accuracyTrackers[((int)laneModifier/10)]++;
         scoreDisplay.GetComponent<ScoreDisplay>().setScoreDisplay(scoreCounter, accuracyTrackers);
-        increaseFever(laneModifier / 100f);
     }
 
     public void deductHealth()
@@ -186,6 +211,18 @@ public class LevelManager : MonoBehaviour
     {
         currentHealth += healModifier * (2 * (laneModifier / 100f));
         healthBar.GetComponentInChildren<HealthBar>().setHealth((int)currentHealth);
+    }
+
+    private void calculateTotalAccuracy()
+    {
+        totalAccuracy = 0;
+        int accuracySum = 0;
+        for (int i = 0; i < LevelManager._i.accuracyTrackers.Length; i++)
+        {
+            accuracySum += LevelManager._i.accuracyTrackers[i] * (i * 10);
+        }
+        if (LevelManager._i.noteCounter != 0)
+            totalAccuracy = (accuracySum / (LevelManager._i.noteCounter * 100f)) * 100f;
     }
 
 }

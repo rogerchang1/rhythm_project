@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("StartScene");
     }
 
+    public void LoadResult()
+    {
+        SceneManager.LoadScene("ResultScene");
+    }
+
     public void setCalibration(float c)
     {
         calibration = Mathf.Round(c*1000f)/1000f;
