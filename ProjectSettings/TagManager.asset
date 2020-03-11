@@ -11,6 +11,8 @@ TagManager:
   - UICanvasTag
   - HealthBarTag
   - ModifierDisplayTag
+  - MaxComboValueTag
+  - TotalAccuracyValueTag
   layers:
   - Default
   - TransparentFX

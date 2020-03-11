@@ -73,6 +73,10 @@ public class LevelManager : MonoBehaviour
             {
                 songObject.GetComponent<SongManager>().startSong();
                 Destroy(startText);
+                /*For testing
+                 * songActive = false;
+                showResult = true;
+                GameManager._gm.LoadResult();*/
             }
             else if (songActive)
             {
