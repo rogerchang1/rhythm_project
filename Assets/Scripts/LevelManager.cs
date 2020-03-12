@@ -10,6 +10,8 @@ public class LevelManager : MonoBehaviour
     public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar, feverBar, ringEffect;
     public int comboCounter, maxComboCounter, noteCounter;
 
+    public Canvas resultCanvas;
+
     public int characterScoreModifier, comboModifier, healModifier;
 
     public float scoreCounter;
@@ -41,6 +43,8 @@ public class LevelManager : MonoBehaviour
         songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
         //characterTest = (GameObject)Instantiate(characterTest);
         startText = (GameObject)Instantiate(startText);
+        resultCanvas = (Canvas)Instantiate(resultCanvas);
+        resultCanvas.enabled = false;
         comboCounter = 0;
         maxComboCounter = 0;
         scoreCounter = 0;
@@ -69,10 +73,12 @@ public class LevelManager : MonoBehaviour
     {
         if (!showResult)
         {
+            //Press any key to start the song.
             if (!songActive && Input.anyKeyDown)
             {
                 songObject.GetComponent<SongManager>().startSong();
                 Destroy(startText);
+                endLevel();
                 /*For testing
                  * songActive = false;
                 showResult = true;
@@ -82,26 +88,17 @@ public class LevelManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(pause))
                 {
-                    isPause = !isPause;
-                    songObject.GetComponent<SongManager>().pauseSong(isPause);
-                }
-                if (isPause)
-                {
-                    Time.timeScale = 0;
-                }
-                else
-                {
-                    Time.timeScale = 1;
+                    pauseLevel();
                 }
 
                 //ACTIVATE FEVER
                 if (Input.GetKeyDown(activateFever) && !feverActive && currentFever >= FEVER_LIMIT)
                 {
                     feverActive = true;
-                    comboModifier = 5;
                     Instantiate(ringEffect, feverBar.transform.position, feverBar.transform.rotation);
                 }
 
+                //Decrement Activated Fever Bar by time.
                 if (feverActive && currentFever >= 0)
                 {
                     currentFever -= 15f * Time.deltaTime;
@@ -110,26 +107,12 @@ public class LevelManager : MonoBehaviour
                 else
                 {
                     feverActive = false;
-                    comboModifier = 1;
                 }
-
 
                 //Song Ends
                 if (songActive && songObject.GetComponent<AudioSource>().time == 0 && !songObject.GetComponent<AudioSource>().isPlaying)
                 {
-                    Destroy(judgementBar);
-                    Destroy(accuracyDisplay);
-                    Destroy(comboDisplay);
-                    Destroy(songObject);
-                    foreach (GameObject lane in GameObject.FindGameObjectsWithTag("LaneTag"))
-                    {
-                        Destroy(lane);
-                    }
-
-                    songActive = false;
-                    showResult = true;
-                    GameManager._gm.LoadResult();
-
+                    endLevel();
                 }
             }
         }
@@ -227,6 +210,42 @@ public class LevelManager : MonoBehaviour
         }
         if (LevelManager._i.noteCounter != 0)
             totalAccuracy = (accuracySum / (LevelManager._i.noteCounter * 100f)) * 100f;
+    }
+
+    private void endLevel()
+    {
+        Destroy(judgementBar);
+        Destroy(accuracyDisplay);
+        Destroy(scoreDisplay);
+        Destroy(comboDisplay);
+        Destroy(songObject);
+        
+
+        foreach (GameObject lane in GameObject.FindGameObjectsWithTag("LaneTag"))
+        {
+            Destroy(lane);
+        }
+
+        songActive = false;
+        showResult = true;
+        resultCanvas.enabled = true;
+        //GameManager._gm.LoadResult();
+    }
+
+    private void pauseLevel()
+    {
+        isPause = !isPause;
+
+        if (isPause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+
+        songObject.GetComponent<SongManager>().pauseSong(isPause);
     }
 
 }

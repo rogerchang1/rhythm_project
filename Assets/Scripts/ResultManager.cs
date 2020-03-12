@@ -10,6 +10,7 @@ public class ResultManager : MonoBehaviour
     public float totalAccuracy;
     public GameObject totalAccuracyValue, maxComboValue;
 
+
     void Start()
     {
         _rm = this;
@@ -23,7 +24,7 @@ public class ResultManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     
