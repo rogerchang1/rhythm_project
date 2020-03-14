@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd588f580b128d458e633e53ddc2e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifierDisplayText: 
 --- !u!1 &6506266668156661534
 GameObject:
   m_ObjectHideFlags: 0
@@ -24,7 +25,7 @@ GameObject:
   - component: {fileID: 6506266668156661529}
   m_Layer: 0
   m_Name: PartyObject
-  m_TagString: Untagged
+  m_TagString: PartyObjectTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79bbcf62c1916f84497d9701988da4da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifierDisplayText: 
 --- !u!1 &6506266669231027132
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,6 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b6f370f6b19474d9b5a487fb50bd04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifierDisplayText: 
 --- !u!1001 &828037270660789470
 PrefabInstance:
   m_ObjectHideFlags: 0

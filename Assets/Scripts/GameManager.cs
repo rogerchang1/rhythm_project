@@ -9,11 +9,17 @@ public class GameManager : MonoBehaviour
 
     public static GameManager _gm;
     public static float calibration = 0f;
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        _gm = this;
-        DontDestroyOnLoad(_gm);
+        if (!_gm)
+        {
+            _gm = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame

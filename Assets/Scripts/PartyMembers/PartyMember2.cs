@@ -16,10 +16,10 @@ public class PartyMember2 : PartyMemberBase
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager._i.feverActive == true)
+        if (LevelManager._lm.feverActive == true)
         {
 
-            LevelManager._i.comboModifier = 2;
+            LevelManager._lm.comboModifier = 2;
 
             if (!abilityActive)
             {
@@ -29,7 +29,7 @@ public class PartyMember2 : PartyMemberBase
         }
         else
         {
-            LevelManager._i.comboModifier = 1;
+            LevelManager._lm.comboModifier = 1;
             abilityActive = false;
         }
     }

@@ -20,14 +20,14 @@ public class PartyMember3 : PartyMemberBase
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager._i.currentHealth <= 50 && activationCounter <= MAX_ACTIVATIONS && !inActive)
+        if (LevelManager._lm.currentHealth <= 50 && activationCounter <= MAX_ACTIVATIONS && !inActive)
         {
             if (!inActive)
             {
                 inActive = true;
                 activationCounter++;
-                LevelManager._i.healModifier = 1;
-                noteCounterEnd = LevelManager._i.noteCounter + 40;
+                LevelManager._lm.healModifier = 1;
+                noteCounterEnd = LevelManager._lm.noteCounter + 40;
             }
             
 
@@ -37,9 +37,9 @@ public class PartyMember3 : PartyMemberBase
                 abilityActive = true;
             }
         }
-        if(inActive && LevelManager._i.noteCounter > noteCounterEnd)
+        if(inActive && LevelManager._lm.noteCounter > noteCounterEnd)
         {
-            LevelManager._i.healModifier = 0;
+            LevelManager._lm.healModifier = 0;
             abilityActive = false;
             inActive = false;
         }

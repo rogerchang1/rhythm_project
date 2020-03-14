@@ -58,7 +58,7 @@ public class SongManager : MonoBehaviour
         notes = transform.GetComponent<BeatMapParser>().notes;
         nextIndexArr = new int[notes.Length];
         lanes = new GameObject[notes.Length];
-        GameObject judgementBar = LevelManager._i.judgementBar;
+        GameObject judgementBar = LevelManager._lm.judgementBar;
         judgementBar_width = judgementBar.GetComponent<SpriteRenderer>().bounds.size.x;
         judgementBar_xPos_left = judgementBar.GetComponent<RectTransform>().transform.position.x - (judgementBar_width / 2);
         judgementBar_yPos = judgementBar.GetComponent<RectTransform>().transform.position.y;
@@ -116,7 +116,7 @@ public class SongManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager._i.songActive)
+        if (LevelManager._lm.songActive)
         { 
             if (!isPause)
             {
@@ -223,7 +223,7 @@ public class SongManager : MonoBehaviour
         lastAudioSourceTime = 0;
 
         GetComponent<AudioSource>().Play();
-        LevelManager._i.songActive = true;
+        LevelManager._lm.songActive = true;
     }
     public void pauseSong(bool pause)
     {

@@ -24,7 +24,7 @@ public class LaneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!LevelManager._i.isPause)
+        if (!LevelManager._lm.isPause)
         {
             //Show SpriteRenderer
             if (Input.GetKey(keyToPress) || Input.GetKeyDown(keyToPress))
@@ -121,12 +121,12 @@ public class LaneController : MonoBehaviour
         else
             noteScoreString = "FAST " + noteScore.ToString();
 
-        LevelManager._i.NoteHit(noteScore, noteScoreString);
+        LevelManager._lm.NoteHit(noteScore, noteScoreString);
     }
 
     private void noteMiss()
     {
-        LevelManager._i.NoteMiss();
+        LevelManager._lm.NoteMiss();
     }
 
 }

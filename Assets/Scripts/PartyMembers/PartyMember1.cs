@@ -19,13 +19,13 @@ public class PartyMember1 : PartyMemberBase
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager._i.comboCounter >= triggerValue)
+        if (LevelManager._lm.comboCounter >= triggerValue)
 
         {
 
-            if (LevelManager._i.comboCounter >= nextLimit && nextLimit <= MAX_LIMIT)
+            if (LevelManager._lm.comboCounter >= nextLimit && nextLimit <= MAX_LIMIT)
             {
-                LevelManager._i.characterScoreModifier += 1;
+                LevelManager._lm.characterScoreModifier += 1;
                 nextLimit += triggerValue;
                 transform.GetComponentInParent<PartyController>().showSprite(gameObject);
             }
@@ -33,7 +33,7 @@ public class PartyMember1 : PartyMemberBase
         }
         else
         {
-            LevelManager._i.characterScoreModifier = 0;
+            LevelManager._lm.characterScoreModifier = 0;
             nextLimit = triggerValue;
 
         }

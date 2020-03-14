@@ -6,11 +6,9 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     
-    public static LevelManager _i;
+    public static LevelManager _lm;
     public GameObject comboDisplay, accuracyDisplay, scoreDisplay, songObject, judgementBar, characterTest, startText,healthBar, feverBar, ringEffect;
     public int comboCounter, maxComboCounter, noteCounter;
-
-    public Canvas resultCanvas;
 
     public int characterScoreModifier, comboModifier, healModifier;
 
@@ -30,28 +28,43 @@ public class LevelManager : MonoBehaviour
     public float maxFever, currentFever, currentHealth, maxHealth, totalAccuracy;
     private const float FEVER_LIMIT = 100f;
 
+    void Awake()
+    {
+        if (!_lm)
+        {
+            _lm = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        _i = this;
-        comboDisplay = (GameObject)Instantiate(comboDisplay);
-        accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
-        scoreDisplay = (GameObject)Instantiate(scoreDisplay);
-        judgementBar = (GameObject)Instantiate(judgementBar);
-        //judgementBar = (GameObject)Instantiate(judgementBar, GameObject.FindGameObjectWithTag("UICanvasTag").transform);
-        //songObject = (GameObject)Instantiate(songObject);
-        songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
-        //characterTest = (GameObject)Instantiate(characterTest);
-        startText = (GameObject)Instantiate(startText);
-        resultCanvas = (Canvas)Instantiate(resultCanvas);
-        resultCanvas.enabled = false;
+        if (!showResult)
+        {
+            comboDisplay = (GameObject)Instantiate(comboDisplay);
+            accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
+            scoreDisplay = (GameObject)Instantiate(scoreDisplay);
+            judgementBar = (GameObject)Instantiate(judgementBar);
+            //judgementBar = (GameObject)Instantiate(judgementBar, GameObject.FindGameObjectWithTag("UICanvasTag").transform);
+            //songObject = (GameObject)Instantiate(songObject);
+            songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
+            startText = (GameObject)Instantiate(startText);
+            startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
+            healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
+            feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
+            showResult = false;
+        }
         comboCounter = 0;
         maxComboCounter = 0;
         scoreCounter = 0;
         isPause = false;
         songActive = false;
         feverActive = false;
-        showResult = false;
         characterScoreModifier = 0;
         healModifier = 0;
         noteCounter = 0;
@@ -62,10 +75,7 @@ public class LevelManager : MonoBehaviour
         totalAccuracy = 0;
         currentHealth = maxHealth;
         accuracyTrackers = new int[11];
-        startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
-        healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
-        feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
-        DontDestroyOnLoad(_i);
+
     }
 
     // Update is called once per frame
@@ -78,11 +88,8 @@ public class LevelManager : MonoBehaviour
             {
                 songObject.GetComponent<SongManager>().startSong();
                 Destroy(startText);
+                //for testing purposes  
                 endLevel();
-                /*For testing
-                 * songActive = false;
-                showResult = true;
-                GameManager._gm.LoadResult();*/
             }
             else if (songActive)
             {
@@ -204,12 +211,12 @@ public class LevelManager : MonoBehaviour
     {
         totalAccuracy = 0;
         int accuracySum = 0;
-        for (int i = 0; i < LevelManager._i.accuracyTrackers.Length; i++)
+        for (int i = 0; i < LevelManager._lm.accuracyTrackers.Length; i++)
         {
-            accuracySum += LevelManager._i.accuracyTrackers[i] * (i * 10);
+            accuracySum += LevelManager._lm.accuracyTrackers[i] * (i * 10);
         }
-        if (LevelManager._i.noteCounter != 0)
-            totalAccuracy = (accuracySum / (LevelManager._i.noteCounter * 100f)) * 100f;
+        if (LevelManager._lm.noteCounter != 0)
+            totalAccuracy = (accuracySum / (LevelManager._lm.noteCounter * 100f)) * 100f;
     }
 
     private void endLevel()
@@ -219,7 +226,9 @@ public class LevelManager : MonoBehaviour
         Destroy(scoreDisplay);
         Destroy(comboDisplay);
         Destroy(songObject);
-        
+        Destroy(GameObject.FindGameObjectWithTag("PartyObjectTag"));
+        Destroy(GameObject.FindGameObjectWithTag("PartyObjectTag"));
+        Destroy(GameObject.FindGameObjectWithTag("UICanvasTag"));
 
         foreach (GameObject lane in GameObject.FindGameObjectsWithTag("LaneTag"))
         {
@@ -228,8 +237,7 @@ public class LevelManager : MonoBehaviour
 
         songActive = false;
         showResult = true;
-        resultCanvas.enabled = true;
-        //GameManager._gm.LoadResult();
+        GameManager._gm.LoadResult();
     }
 
     private void pauseLevel()

@@ -13,6 +13,8 @@ TagManager:
   - ModifierDisplayTag
   - MaxComboValueTag
   - TotalAccuracyValueTag
+  - PartyObjectTag
+  - LevelManagerTag
   layers:
   - Default
   - TransparentFX

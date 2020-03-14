@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2872485676517780887}
   m_Layer: 0
   m_Name: LevelManager
-  m_TagString: Untagged
+  m_TagString: LevelManagerTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,17 +50,31 @@ MonoBehaviour:
   scoreDisplay: {fileID: 8516213979441565689, guid: 8d227415b3998e644ae503b055964b28,
     type: 3}
   songObject: {fileID: 0}
-  judgementBar: {fileID: 1050639743594064481, guid: 170b07b4ba1ca00498be41b53b4232fc,
+  judgementBar: {fileID: 4261133254824555088, guid: 92c06b2d60b93474f905eca4fa2a2503,
     type: 3}
   characterTest: {fileID: 3086358481936982356, guid: e436a0f341a2f6349b9c5f1232a80b73,
     type: 3}
   startText: {fileID: 3650724522130939020, guid: 8f9e35b096a3dc644b647d758fdb3116,
     type: 3}
+  healthBar: {fileID: 0}
+  feverBar: {fileID: 0}
+  ringEffect: {fileID: 0}
   comboCounter: 0
   maxComboCounter: 0
+  noteCounter: 0
   characterScoreModifier: 0
+  comboModifier: 0
+  healModifier: 0
   scoreCounter: 0
   accuracyTrackers: 
   pause: 0
+  activateFever: 0
   isPause: 0
   songActive: 0
+  feverActive: 0
+  showResult: 0
+  maxFever: 0
+  currentFever: 0
+  currentHealth: 0
+  maxHealth: 0
+  totalAccuracy: 0
