@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager _gm;
     public static float calibration = 0f;
+    public string songNameToLoad;
+
     void Awake()
     {
         if (!_gm)
@@ -37,6 +39,16 @@ public class GameManager : MonoBehaviour
     public void LoadResult()
     {
         SceneManager.LoadScene("ResultScene");
+    }
+
+    public void LoadWorld()
+    {
+        SceneManager.LoadScene("WorldScene");
+    }
+
+    public void LoadLevel()
+    {
+        SceneManager.LoadScene("LevelScene");
     }
 
     public void setCalibration(float c)

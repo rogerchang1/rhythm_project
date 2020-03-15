@@ -39,6 +39,7 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
 
     // Start is called before the first frame update
@@ -51,8 +52,8 @@ public class LevelManager : MonoBehaviour
             scoreDisplay = (GameObject)Instantiate(scoreDisplay);
             judgementBar = (GameObject)Instantiate(judgementBar);
             //judgementBar = (GameObject)Instantiate(judgementBar, GameObject.FindGameObjectWithTag("UICanvasTag").transform);
-            //songObject = (GameObject)Instantiate(songObject);
-            songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
+            //songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
+            loadSong(GameManager._gm.songNameToLoad);
             startText = (GameObject)Instantiate(startText);
             startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
             healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
@@ -89,7 +90,7 @@ public class LevelManager : MonoBehaviour
                 songObject.GetComponent<SongManager>().startSong();
                 Destroy(startText);
                 //for testing purposes  
-                endLevel();
+                //endLevel();
             }
             else if (songActive)
             {
@@ -254,6 +255,11 @@ public class LevelManager : MonoBehaviour
         }
 
         songObject.GetComponent<SongManager>().pauseSong(isPause);
+    }
+
+    public void loadSong(string songName)
+    {
+        songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/"+songName)) as GameObject);
     }
 
 }
