@@ -29,7 +29,7 @@ public class ResultManager : MonoBehaviour
         {
             //Destroy(LevelManager._lm);
             Destroy(GameObject.FindGameObjectWithTag("LevelManagerTag"));
-            GameManager._gm.LoadStart();
+            GameManager._gm.LoadWorld();
         }
     }
 

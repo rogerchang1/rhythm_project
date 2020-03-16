@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 public class LevelController : MonoBehaviour
 {
     public string songNameToLoad;
     void Start()
     {
-        
+        gameObject.GetComponentInChildren<TextMeshPro>().SetText(songNameToLoad);
     }
 
     // Update is called once per frame
@@ -27,5 +29,9 @@ public class LevelController : MonoBehaviour
         loadLevel();
     }
 
+    private void bounce()
+    {
+
+    }
 
 }
