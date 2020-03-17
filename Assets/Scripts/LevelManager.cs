@@ -45,21 +45,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!showResult)
-        {
-            comboDisplay = (GameObject)Instantiate(comboDisplay);
-            accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
-            scoreDisplay = (GameObject)Instantiate(scoreDisplay);
-            judgementBar = (GameObject)Instantiate(judgementBar);
-            //judgementBar = (GameObject)Instantiate(judgementBar, GameObject.FindGameObjectWithTag("UICanvasTag").transform);
-            //songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
-            loadSong(GameManager._gm.songNameToLoad);
-            startText = (GameObject)Instantiate(startText);
-            startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
-            healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
-            feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
-            showResult = false;
-        }
+        
         comboCounter = 0;
         maxComboCounter = 0;
         scoreCounter = 0;
@@ -76,7 +62,21 @@ public class LevelManager : MonoBehaviour
         totalAccuracy = 0;
         currentHealth = maxHealth;
         accuracyTrackers = new int[11];
-
+        if (!showResult)
+        {
+            comboDisplay = (GameObject)Instantiate(comboDisplay);
+            accuracyDisplay = (GameObject)Instantiate(accuracyDisplay);
+            scoreDisplay = (GameObject)Instantiate(scoreDisplay);
+            judgementBar = (GameObject)Instantiate(judgementBar);
+            //judgementBar = (GameObject)Instantiate(judgementBar, GameObject.FindGameObjectWithTag("UICanvasTag").transform);
+            //songObject = (GameObject)(Instantiate(Resources.Load("SongObjects/B B B B")) as GameObject);
+            loadSong(GameManager._gm.songNameToLoad);
+            startText = (GameObject)Instantiate(startText);
+            startText.GetComponent<BlinkController>().setTempo(songObject.GetComponent<SongManager>().bpm);
+            healthBar.GetComponent<HealthBar>().setMaxHealth((int)maxHealth);
+            feverBar.GetComponent<FeverBar>().setMaxFever(maxFever);
+            showResult = false;
+        }
     }
 
     // Update is called once per frame

@@ -15,6 +15,7 @@ TagManager:
   - TotalAccuracyValueTag
   - PartyObjectTag
   - LevelManagerTag
+  - ScoreValueTag
   layers:
   - Default
   - TransparentFX

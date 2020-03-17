@@ -18,6 +18,7 @@ public class ResultManager : MonoBehaviour
         GameObject totalAccuracyValue = GameObject.FindGameObjectWithTag("TotalAccuracyValueTag");
         totalAccuracyValue.GetComponent<TextMeshProUGUI>().SetText(LevelManager._lm.totalAccuracy.ToString());
         GameObject.FindGameObjectWithTag("MaxComboValueTag").GetComponent<TextMeshProUGUI>().SetText(LevelManager._lm.maxComboCounter.ToString());
+        GameObject.FindGameObjectWithTag("ScoreValueTag").GetComponent<TextMeshProUGUI>().SetText(LevelManager._lm.scoreCounter.ToString());
 
     }
 

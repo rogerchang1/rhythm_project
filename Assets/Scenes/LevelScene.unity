@@ -177,7 +177,7 @@ PrefabInstance:
     - target: {fileID: 312049593207221945, guid: 617b38f2022e5d94ca6e3ed90f17edba,
         type: 3}
       propertyPath: songNameToLoad
-      value: 
+      value: B B B B
       objectReference: {fileID: 0}
     - target: {fileID: 312049593207221947, guid: 617b38f2022e5d94ca6e3ed90f17edba,
         type: 3}
