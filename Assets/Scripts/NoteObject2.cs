@@ -27,6 +27,9 @@ public class NoteObject2 : MonoBehaviour
     {
         if (!pauseAtJudgeBar)
         {
+
+            
+            
             if (transform.position.y > judgePos.y)
             {
                 transform.position = Vector2.Lerp(
@@ -34,6 +37,21 @@ public class NoteObject2 : MonoBehaviour
                     judgePos,
                     (sm.beatsShownInAdvance - (beatOfThisNote - sm.songPosInBeats)) / sm.beatsShownInAdvance
                 );
+
+                //For long hold notes, need to adjust local scale y .
+                /*
+                if (beatOfThisNote == endBeatOfThisNote && transform.Find("notehold").gameObject.activeInHierarchy && noteType == 2)
+                {
+                    Transform noteHoldTransform = transform.Find("notehold").transform;
+                    Vector3 tempVector = noteHoldTransform.localScale;
+                    tempVector.y = spawnPos.y - Vector2.Lerp(
+                        spawnPos,
+                        judgePos,
+                        (sm.songPosInBeats - beatOfThisNote) / sm.beatsShownInAdvance
+                    ).y;
+                    noteHoldTransform.localScale = tempVector;
+                }
+                */
             }
             else
             {

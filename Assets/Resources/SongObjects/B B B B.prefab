@@ -150,7 +150,7 @@ MonoBehaviour:
   offset: 0
   bpm: 180
   beatsShownInAdvance: 4
-  note: {fileID: 4285126948979157551, guid: 9d3a313077dfba54fa88405aec502fd8, type: 3}
+  note: {fileID: 1339894256552561551, guid: 6ded49fac476f24448220b759dfde199, type: 3}
   lane: {fileID: 7512239457748035320, guid: e834caa5faf391942be0d9c6989420e9, type: 3}
   notehold: {fileID: 3397768560545077992, guid: a4b3d7d8c074d0a49998e9079eb5b6c3,
     type: 3}

@@ -184,18 +184,7 @@ public class SongManager : MonoBehaviour
                                     n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
                                     n.GetComponent<NoteObject2>().noteType = LevelManager.NOTE_HOLD;
                                     n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
-
-                                    //Create Note Hold Object
-                                    GameObject nh = (GameObject)Instantiate(notehold);
-                                    nh.GetComponent<NoteHoldObject>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + (GameManager.calibration / secPerBeat);
-                                    nh.GetComponent<NoteHoldObject>().sm = this;
-                                    nh.GetComponent<NoteHoldObject>().lane = laneIdx;
-                                    float lanePos_nh = lanes[laneIdx].transform.position.x;
-                                    nh.GetComponent<NoteHoldObject>().spawnPos = new Vector2(lanePos_nh, judgementBar_yPos + 9f); //arbitrarily 9f... because.. I don't know.
-                                    nh.GetComponent<NoteHoldObject>().judgePos = new Vector2(lanePos_nh, judgementBar_yPos);
-                                    nh.GetComponent<NoteHoldObject>().removePos = new Vector2(lanePos_nh, judgementBar_yPos - 9f);
-                                    //lanes[laneIdx].GetComponent<LaneController>().noteList.AddLast(n);
-
+                                    n.transform.Find("notehold").gameObject.SetActive(true);
                                     break;
                                 case LevelManager.NOTE_RELEASE:
                                     n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
@@ -209,6 +198,7 @@ public class SongManager : MonoBehaviour
 
                             //initialize the fields of the music note
                             n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + (GameManager.calibration/secPerBeat);
+                            n.GetComponent<NoteObject2>().endBeatOfThisNote = n.GetComponent<NoteObject2>().beatOfThisNote;
                             n.GetComponent<NoteObject2>().sm = this;
                             n.GetComponent<NoteObject2>().lane = laneIdx;
                             float lanePos = lanes[laneIdx].transform.position.x;
