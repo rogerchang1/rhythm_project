@@ -12,6 +12,8 @@ public class LaneController : MonoBehaviour
     public float firstNoteBeat; //debug purposes
     public GameObject noteTemp; //used to temporarily keep track of long note's starting beat.
 
+    private bool removeReleaseNote;
+
     private float limit;
     private const float LIMIT_MODIFIER = .3f;
     // Start is called before the first frame update
@@ -19,6 +21,7 @@ public class LaneController : MonoBehaviour
     {
         noteList = new LinkedList<GameObject>();
         limit = sm.beatsShownInAdvance * LIMIT_MODIFIER; //limit used to be just 2f, but I think that's unbalanced with the scroll speed modifier.
+        removeReleaseNote = false;
     }
 
     // Update is called once per frame
@@ -40,7 +43,13 @@ public class LaneController : MonoBehaviour
                 GameObject firstNote = noteList.First.Value;
                 NoteObject2 n = firstNote.GetComponent<NoteObject2>();
                 firstNoteBeat = n.beatOfThisNote;
-
+                if (removeReleaseNote)
+                {
+                    noteMiss();
+                    noteList.RemoveFirst();
+                    Destroy(firstNote);
+                    removeReleaseNote = false;
+                }
                 //regular hit
                 if (Input.GetKeyDown(keyToPress) && n.noteType == LevelManager.NOTE_NORMAL)
                 {
@@ -83,6 +92,7 @@ public class LaneController : MonoBehaviour
                         //Miss Release
                         noteMiss();
                         Destroy(noteTemp);
+                        removeReleaseNote = true;
                     }
                 }
 
@@ -92,6 +102,10 @@ public class LaneController : MonoBehaviour
                     noteMiss();
                     noteList.RemoveFirst();
                     Destroy(firstNote);
+                    if(firstNote.GetComponent<NoteObject2>().noteType == LevelManager.NOTE_HOLD)
+                    {
+                        removeReleaseNote = true;
+                    }
                     if (noteTemp != null)
                     {
                         Destroy(noteTemp);

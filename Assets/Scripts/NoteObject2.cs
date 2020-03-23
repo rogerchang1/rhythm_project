@@ -88,21 +88,4 @@ public class NoteObject2 : MonoBehaviour
             }
         }
     }
-
-    void ResizeSpriteToScreen(Transform t)
-    {
-        var sr = t.GetComponent<SpriteRenderer>();
-        if (sr == null) return;
-
-        t.localScale = new Vector3(1, 1, 1);
-
-        float width = sr.sprite.bounds.size.x;
-        float height = sr.sprite.bounds.size.y;
-
-        float worldScreenHeight = Camera.main.orthographicSize * 2f;
-        float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
-
-        t.localScale = new Vector3(worldScreenWidth / width, worldScreenHeight / height,0);
-    }
-
 }

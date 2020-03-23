@@ -157,14 +157,21 @@ public class SongManager : MonoBehaviour
                             {
                                 case 1:
                                     n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                    n.transform.Find("noteholdobject").gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
                                     break;
                                 case 2:
                                     if (notes.Length == 4)
+                                    {
                                         n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                        n.transform.Find("noteholdobject").gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                    }
                                     break;
                                 case 4:
                                     if (notes.Length == 6)
+                                    {
                                         n.GetComponent<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                        n.transform.Find("noteholdobject").gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(.25f, .7f, 1f, 1f);
+                                    }
                                     break;
                                 default:
                                     break;
@@ -185,13 +192,13 @@ public class SongManager : MonoBehaviour
                                     n.GetComponent<NoteObject2>().noteType = noteType;
                                     break;
                                 case LevelManager.NOTE_HOLD:
-                                    n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
+                                    //n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
                                     n.GetComponent<NoteObject2>().noteType = LevelManager.NOTE_HOLD;
                                     n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
                                     n.transform.Find("noteholdobject").gameObject.SetActive(true);
                                     break;
                                 case LevelManager.NOTE_RELEASE:
-                                    n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
+                                    //n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
                                     n.GetComponent<NoteObject2>().noteType = noteType;
                                     n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "release";
                                     lanes[laneIdx].GetComponent<LaneController>().changeLastNoteEndBeatValue(n.GetComponent<NoteObject2>().beatOfThisNote);
