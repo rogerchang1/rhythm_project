@@ -173,8 +173,12 @@ public class SongManager : MonoBehaviour
                             //resize each note to scale with judgement bar and number of lanes
                             n.transform.localScale -= new Vector3(n.transform.localScale.x * (1 - (judgementBar_width / notes.Length)), 0, 0);
 
-                            //if it's a hold note, indicate if it's hold or release.
+                            
+                            //initialize the fields of the music note
+                            n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + (GameManager.calibration/secPerBeat);
+                            n.GetComponent<NoteObject2>().endBeatOfThisNote = n.GetComponent<NoteObject2>().beatOfThisNote;
 
+                            //if it's a hold note, indicate if it's hold or release.
                             switch (noteType)
                             {
                                 case LevelManager.NOTE_NORMAL:
@@ -184,21 +188,20 @@ public class SongManager : MonoBehaviour
                                     n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
                                     n.GetComponent<NoteObject2>().noteType = LevelManager.NOTE_HOLD;
                                     n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "hold";
-                                    n.transform.Find("notehold").gameObject.SetActive(true);
+                                    n.transform.Find("noteholdobject").gameObject.SetActive(true);
                                     break;
                                 case LevelManager.NOTE_RELEASE:
                                     n.GetComponent<SpriteRenderer>().color = new Color(1f, .5f, .5f, 1f);
                                     n.GetComponent<NoteObject2>().noteType = noteType;
                                     n.transform.Find("HoldRelease").GetComponent<TextMesh>().text = "release";
+                                    lanes[laneIdx].GetComponent<LaneController>().changeLastNoteEndBeatValue(n.GetComponent<NoteObject2>().beatOfThisNote);
                                     break;
                                 default:
                                     n.GetComponent<NoteObject2>().noteType = noteType;
                                     break;
                             }
 
-                            //initialize the fields of the music note
-                            n.GetComponent<NoteObject2>().beatOfThisNote = notesInLane[nextIndex][0] + 1 + (GameManager.calibration/secPerBeat);
-                            n.GetComponent<NoteObject2>().endBeatOfThisNote = n.GetComponent<NoteObject2>().beatOfThisNote;
+
                             n.GetComponent<NoteObject2>().sm = this;
                             n.GetComponent<NoteObject2>().lane = laneIdx;
                             float lanePos = lanes[laneIdx].transform.position.x;

@@ -129,4 +129,9 @@ public class LaneController : MonoBehaviour
         LevelManager._lm.NoteMiss();
     }
 
+    public void changeLastNoteEndBeatValue(float newEndBeatOfThisNote)
+    {
+        noteList.Last.Value.GetComponent<NoteObject2>().endBeatOfThisNote = newEndBeatOfThisNote;
+    }
+
 }
