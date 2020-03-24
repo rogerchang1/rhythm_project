@@ -31,7 +31,22 @@ public class NoteObject2 : MonoBehaviour
         if (!pauseAtJudgeBar)
         {
 
-            
+            //For long hold notes, need to adjust local scale y .
+            if (beatOfThisNote == endBeatOfThisNote && transform.Find("noteholdobject").gameObject.activeInHierarchy && noteType == 2)
+            {
+                Transform noteHoldTransform = transform.Find("noteholdobject").transform;
+                Vector3 tempVector = noteHoldTransform.localScale;
+
+                tempVector.y = (spawnPos.y - transform.position.y);
+                noteHoldTransform.localScale = tempVector;
+            }
+            else if (beatOfThisNote != endBeatOfThisNote && transform.Find("noteholdobject").gameObject.activeInHierarchy && noteType == 2)
+            {
+                Transform noteHoldTransform = transform.Find("noteholdobject").transform;
+                Vector3 tempVector = noteHoldTransform.localScale;
+                tempVector.y = (Vector2.Lerp(spawnPos, judgePos, (sm.beatsShownInAdvance - (endBeatOfThisNote - sm.songPosInBeats)) / sm.beatsShownInAdvance).y - transform.position.y);
+                noteHoldTransform.localScale = tempVector;
+            }
 
             if (transform.position.y > judgePos.y)
             {
@@ -40,22 +55,6 @@ public class NoteObject2 : MonoBehaviour
                     judgePos,
                     (sm.beatsShownInAdvance - (beatOfThisNote - sm.songPosInBeats)) / sm.beatsShownInAdvance
                 );
-                //For long hold notes, need to adjust local scale y .
-                if (beatOfThisNote == endBeatOfThisNote && transform.Find("noteholdobject").gameObject.activeInHierarchy && noteType == 2)
-                {
-                    Transform noteHoldTransform = transform.Find("noteholdobject").transform;
-                    Vector3 tempVector = noteHoldTransform.localScale;
-
-                    tempVector.y = (spawnPos.y - transform.position.y);
-                    noteHoldTransform.localScale = tempVector;
-                }
-                else if (beatOfThisNote != endBeatOfThisNote && transform.Find("noteholdobject").gameObject.activeInHierarchy && noteType == 2)
-                {
-                    Transform noteHoldTransform = transform.Find("noteholdobject").transform;
-                    Vector3 tempVector = noteHoldTransform.localScale;
-                    tempVector.y = (Vector2.Lerp(spawnPos, judgePos, (sm.beatsShownInAdvance - (endBeatOfThisNote - sm.songPosInBeats)) / sm.beatsShownInAdvance).y - transform.position.y);
-                    noteHoldTransform.localScale = tempVector;
-                }
             }
             else
             {

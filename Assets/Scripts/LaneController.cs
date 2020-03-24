@@ -107,7 +107,7 @@ public class LaneController : MonoBehaviour
                         removeReleaseNote = true;
                     }
                     if (noteTemp != null)
-                    {
+                    {   
                         Destroy(noteTemp);
                     }
                 }
@@ -145,7 +145,8 @@ public class LaneController : MonoBehaviour
 
     public void changeLastNoteEndBeatValue(float newEndBeatOfThisNote)
     {
-        noteList.Last.Value.GetComponent<NoteObject2>().endBeatOfThisNote = newEndBeatOfThisNote;
+        if(noteList.Count > 0)
+            noteList.Last.Value.GetComponent<NoteObject2>().endBeatOfThisNote = newEndBeatOfThisNote;
     }
 
 }
