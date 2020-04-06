@@ -16,6 +16,8 @@ TagManager:
   - PartyObjectTag
   - LevelManagerTag
   - ScoreValueTag
+  - DialogueNameTag
+  - DialogueTextTag
   layers:
   - Default
   - TransparentFX

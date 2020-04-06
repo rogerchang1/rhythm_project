@@ -309,6 +309,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f8a8a998a7f8c44a3b029542863018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nameText: {fileID: 1005035369}
+  dialogueText: {fileID: 1072871481}
+  keyToPress: 0
+  animator: {fileID: 1111050278}
 --- !u!4 &580983955
 Transform:
   m_ObjectHideFlags: 0
@@ -941,7 +945,7 @@ GameObject:
   - component: {fileID: 1005035369}
   m_Layer: 5
   m_Name: Name
-  m_TagString: Untagged
+  m_TagString: DialogueNameTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1255,7 +1259,7 @@ GameObject:
   - component: {fileID: 1072871481}
   m_Layer: 5
   m_Name: Dialogue
-  m_TagString: Untagged
+  m_TagString: DialogueTextTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1409,6 +1413,7 @@ GameObject:
   - component: {fileID: 1111050275}
   - component: {fileID: 1111050277}
   - component: {fileID: 1111050276}
+  - component: {fileID: 1111050278}
   m_Layer: 5
   m_Name: DialogueBox
   m_TagString: Untagged
@@ -1434,7 +1439,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -14, y: -165}
+  m_AnchoredPosition: {x: 7, y: -150}
   m_SizeDelta: {x: 402.4, y: 155.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1111050276
@@ -1472,6 +1477,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111050274}
   m_CullTransparentMesh: 0
+--- !u!95 &1111050278
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111050274}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4d03a918ee43a32428f0da116d90418d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1365260146
 GameObject:
   m_ObjectHideFlags: 0
@@ -2079,9 +2103,9 @@ MonoBehaviour:
   dialogue:
     name: Citra
     sentences:
-    - asdf
-    - asdffsf
-    - asdfadsfadsfs
+    - Hi
+    - I am Citra
+    - Bye
 --- !u!224 &1734654098
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2164,7 +2188,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1734654099}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
